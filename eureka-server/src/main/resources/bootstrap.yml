@@ -1,0 +1,6 @@
+spring:
+  cloud:
+    config:
+      name: eureka-server
+      uri: http://config-server:8888
+      fail-fast: true

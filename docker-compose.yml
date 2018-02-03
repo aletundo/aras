@@ -1,0 +1,35 @@
+version: '3.4'
+
+services:
+  config-server:
+    build:
+      context: config-server/
+    restart: on-failure
+    networks:
+      - config-net
+  eureka-server:
+    build:
+      context: eureka-server/
+    restart: on-failure
+    depends_on:
+      - config-server
+    networks:
+      - config-net
+      - backend-net
+  gateway:
+    build:
+      context: gateway/
+    restart: on-failure
+    ports:
+      - 9000:9000
+    depends_on:
+      - config-server
+      - eureka-server
+    networks:
+      - config-net
+      - backend-net
+networks:
+  config-net:
+    driver: bridge
+  backend-net:
+    driver: bridge

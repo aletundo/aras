@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: gateway
+zuul:
+  routes:
+    eureka-server:
+      path: /eureka-server/**
+      sensitive-headers: Set-Cookie,Authorization
+      url: http://eureka-server:8761
+      strip-prefix: true
+    eureka-server-static:
+      path: /eureka/**
+      url: http://eureka-server:8761/eureka/
+hystrixcommand:
+  discovery:
+    execution:
+      isolation:
+        thread:
+          timeoutInMilliseconds: 600000
+server:
+  port: 9000

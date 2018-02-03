@@ -1,0 +1,8 @@
+eureka:
+  client:
+    region: default
+    serviceUrl:
+      defaultZone: http://eureka-server:8761/eureka/
+    registryFetchIntervalSeconds: 5
+    healthcheck:
+      enabled: true
