@@ -1,1 +1,4 @@
 theme: jekyll-theme-leap-day
+title: ARAS (ARcan As a Service)
+description: Detect artchitectural smells and flows in your projects
+show_downloads: true
