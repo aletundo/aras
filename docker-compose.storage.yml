@@ -1,0 +1,19 @@
+version: '3.4'
+
+services:
+  notifications-db:
+    image: mariadb:10.2
+    environment:
+      MYSQL_ROOT_PASSWORD: ${NOTIFICATIONS_DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${NOTIFICATIONS_DB}
+      MYSQL_USER: ${NOTIFICATIONS_DB_USER}
+      MYSQL_PASSWORD: ${NOTIFICATIONS_DB_PASSWORD}
+    volumes:
+      - notifications-db-data:/var/lib/mysql
+    networks:
+      - notifications-db-net
+networks:
+  notifications-db-net:
+    driver: bridge
+volumes:
+  notifications-db-data:

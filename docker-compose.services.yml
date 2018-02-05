@@ -1,0 +1,43 @@
+version: '3.4'
+
+services:
+  gateway:
+    build:
+      context: gateway/
+    restart: on-failure
+    ports:
+      - 9000:9000
+    networks:
+      - config-net
+      - backend-net
+  analysesexecutor-service:
+    build:
+      context:
+        analysesexecutor-service/
+    restart: on-failure
+    networks:
+      - config-net
+      - backend-net
+      - broker-net
+  notifications-service:
+    build:
+      context: notifications-service/
+    restart: on-failure
+    networks:
+      - config-net
+      - backend-net
+      - broker-net
+      - notifications-db-net
+networks:
+  config-net:
+    external:
+      name: ${COMPOSE_PROJECT_NAME}_config-net
+  broker-net:
+    external:
+      name: ${COMPOSE_PROJECT_NAME}_aras_broker-net
+  backend-net:
+    external:
+      name: ${COMPOSE_PROJECT_NAME}_backend-net
+  notifications-db-net:
+    external:
+      name: ${COMPOSE_PROJECT_NAME}_notifications-db-net
