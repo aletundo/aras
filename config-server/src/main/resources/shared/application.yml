@@ -6,3 +6,7 @@ eureka:
     registryFetchIntervalSeconds: 5
     healthcheck:
       enabled: true
+spring:
+  output:
+    ansi:
+      enabled: DETECT
