@@ -1,6 +1,0 @@
-spring:
-  cloud:
-    config:
-      name: analysesexecutor-service
-      uri: http://config-server:8888
-      fail-fast: true

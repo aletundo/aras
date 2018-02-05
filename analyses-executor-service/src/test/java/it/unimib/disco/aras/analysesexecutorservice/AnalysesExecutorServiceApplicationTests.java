@@ -1,4 +1,4 @@
-package it.analysesexecutorservice;
+package it.unimib.disco.aras.analysesexecutorservice;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -7,7 +7,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class AnalysesexecutorServiceApplicationTests {
+public class AnalysesExecutorServiceApplicationTests {
 
 	@Test
 	public void contextLoads() {

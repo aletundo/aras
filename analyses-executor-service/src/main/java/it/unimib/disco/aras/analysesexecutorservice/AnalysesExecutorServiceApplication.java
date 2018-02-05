@@ -1,4 +1,4 @@
-package it.analysesexecutorservice;
+package it.unimib.disco.aras.analysesexecutorservice;
 
 import java.util.Date;
 
@@ -19,16 +19,16 @@ import org.springframework.integration.annotation.Poller;
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableBinding(Source.class)
-public class AnalysesexecutorServiceApplication {
-    
+public class AnalysesExecutorServiceApplication {
+
     public static void main(String[] args) {
-        SpringApplication.run(AnalysesexecutorServiceApplication.class, args);
+        SpringApplication.run(AnalysesExecutorServiceApplication.class, args);
     }
 
     @Bean
     @InboundChannelAdapter(value = Source.OUTPUT, poller = @Poller(fixedDelay = "10000", maxMessagesPerPoll = "1"))
     public MessageSource<TimeInfo> timerMessageSource() {
-        return () -> MessageBuilder.withPayload(new TimeInfo(new Date().getTime() + "", "Label")).build();
+        return () -> MessageBuilder.withPayload(new TimeInfo(new Date().getTime() + "", "Executor")).build();
     }
 
     public static class TimeInfo {

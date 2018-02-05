@@ -3,13 +3,13 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>it</groupId>
-	<artifactId>analysesexecutor-service</artifactId>
+	<groupId>it.unimib.disco.aras</groupId>
+	<artifactId>analyses-executor-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>analysesexecutor-service</name>
-	<description>AnalysesExecutor microservice</description>
+	<name>analyses-executor-service</name>
+	<description>Analyses Executor microservice</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
