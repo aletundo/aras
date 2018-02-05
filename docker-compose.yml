@@ -10,10 +10,19 @@ services:
     networks:
       - config-net
       - backend-net
-  analysesexecutor-service:
+  analyses-configurator-service:
     build:
       context:
-        analysesexecutor-service/
+        analyses-configurator-service/
+    restart: on-failure
+    networks:
+      - config-net
+      - backend-net
+      - broker-net
+  analyses-executor-service:
+    build:
+      context:
+        analyses-executor-service/
     restart: on-failure
     networks:
       - config-net
@@ -34,7 +43,7 @@ networks:
       name: ${COMPOSE_PROJECT_NAME}_config-net
   broker-net:
     external:
-      name: ${COMPOSE_PROJECT_NAME}_aras_broker-net
+      name: ${COMPOSE_PROJECT_NAME}_broker-net
   backend-net:
     external:
       name: ${COMPOSE_PROJECT_NAME}_backend-net

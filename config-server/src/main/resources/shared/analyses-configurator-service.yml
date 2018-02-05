@@ -1,6 +1,6 @@
 spring:
   application:
-    name: analysesexecutor-service
+    name: analyses-configurator-service
   cloud:
     stream:
       kafka:

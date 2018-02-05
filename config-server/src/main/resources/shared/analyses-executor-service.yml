@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: analyses-executor-service
+  cloud:
+    stream:
+      kafka:
+        binder:
+          brokers: kafka
+          zkNodes: zookeeper
+      bindings:
+        output:
+          destination: analyses
+          content-type: application/json
+server:
+  port: 0

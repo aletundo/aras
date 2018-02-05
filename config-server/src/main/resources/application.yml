@@ -3,6 +3,7 @@ spring:
     name: config-server
   cloud:
     config:
+      name: config-server
       server:
         native:
           search-locations: classpath:/shared
