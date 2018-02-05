@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: notifications-service
+  jpa:
+    hibernate:
+      ddl-auto: none
+  datasource:
+    url: jdbc:mariadb://notifications-db:3306/notifications
+    username: user
+    password: mysupersecretpassword
+    driver-class-name: org.mariadb.jdbc.Driver
+  cloud:
+    stream:
+      kafka:
+        binder:
+          brokers: kafka
+          zkNodes: zookeeper
+      bindings:
+        input:
+          group: analysesGroup
+          destination: analyses
+          content-type: application/json
+server:
+  port: 0
