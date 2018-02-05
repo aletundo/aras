@@ -1,6 +1,33 @@
 version: '3.4'
 
 services:
+  zookeeper:
+    image: wurstmeister/zookeeper
+    networks:
+      - broker-net
+  kafka:
+    image: wurstmeister/kafka:0.10.1.1
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: ${KAFKA_ADVERTISED_HOST_NAME}
+      KAFKA_ADVERTISED_PORT:  ${KAFKA_ADVERTISED_PORT}
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_CREATE_TOPICS:  ${KAFKA_TOPICS}
+    restart: on-failure
+    depends_on:
+      - zookeeper
+    networks:
+      - broker-net
+  notifications-db:
+    image: mariadb:10.2
+    environment:
+      MYSQL_ROOT_PASSWORD: ${NOTIFICATIONS_DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${NOTIFICATIONS_DB}
+      MYSQL_USER: ${NOTIFICATIONS_DB_USER}
+      MYSQL_PASSWORD: ${NOTIFICATIONS_DB_PASSWORD}
+    volumes:
+      - notifications-db-data:/var/lib/mysql
+    networks:
+      - notifications-db-net
   config-server:
     build:
       context: config-server/
@@ -28,8 +55,41 @@ services:
     networks:
       - config-net
       - backend-net
+  analysesexecutor-service:
+    build:
+      context:
+        analysesexecutor-service/
+    restart: on-failure
+    depends_on:
+      - config-server
+      - eureka-server
+      - kafka
+    networks:
+      - config-net
+      - backend-net
+      - broker-net
+  notifications-service:
+    build:
+      context: notifications-service/
+    restart: on-failure
+    depends_on:
+      - config-server
+      - eureka-server
+      - kafka
+      - notifications-db
+    networks:
+      - config-net
+      - backend-net
+      - broker-net
+      - notifications-db-net
+volumes:
+  notifications-db-data:
 networks:
   config-net:
     driver: bridge
   backend-net:
+    driver: bridge
+  broker-net:
+    driver: bridge
+  notifications-db-net:
     driver: bridge
