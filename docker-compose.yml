@@ -4,7 +4,6 @@ services:
   gateway:
     build:
       context: gateway/
-    restart: on-failure
     ports:
       - 9000:9000
     networks:
@@ -14,7 +13,6 @@ services:
     build:
       context:
         analyses-configurator-service/
-    restart: on-failure
     networks:
       - config-net
       - backend-net
@@ -23,7 +21,6 @@ services:
     build:
       context:
         analyses-executor-service/
-    restart: on-failure
     networks:
       - config-net
       - backend-net
@@ -31,7 +28,6 @@ services:
   notifications-service:
     build:
       context: notifications-service/
-    restart: on-failure
     networks:
       - config-net
       - backend-net

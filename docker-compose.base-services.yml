@@ -12,7 +12,6 @@ services:
       KAFKA_ADVERTISED_PORT:  ${KAFKA_ADVERTISED_PORT}
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_CREATE_TOPICS:  ${KAFKA_TOPICS}
-    restart: on-failure
     depends_on:
       - zookeeper
     networks:
@@ -20,13 +19,11 @@ services:
   config-server:
     build:
       context: config-server/
-    restart: on-failure
     networks:
       - config-net
   eureka-server:
     build:
       context: eureka-server/
-    restart: on-failure
     depends_on:
       - config-server
     networks:
