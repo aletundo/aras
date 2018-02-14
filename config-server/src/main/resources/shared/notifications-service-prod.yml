@@ -21,4 +21,4 @@ spring:
           destination: analyses
           content-type: application/json
 server:
-  port: ${NOTIFICATIONS_SERVICE_PORT}
+  port: 0

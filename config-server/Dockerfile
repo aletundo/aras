@@ -9,5 +9,4 @@ FROM openjdk:8-jre-alpine
 COPY --from=builder /home/root/build/target/*.jar \
 /srv/config-server/config-server.jar
 WORKDIR /srv/config-server/
-EXPOSE 8888
 ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "config-server.jar"]

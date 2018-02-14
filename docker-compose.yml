@@ -1,48 +1,50 @@
 version: '3.4'
 
 services:
-  gateway:
-    build:
-      context: gateway/
-    ports:
-      - 9000:9000
-    networks:
-      - config-net
-      - backend-net
-  analyses-configurator-service:
-    build:
-      context:
-        analyses-configurator-service/
-    networks:
-      - config-net
-      - backend-net
-      - broker-net
   analyses-executor-service:
-    build:
-      context:
-        analyses-executor-service/
-    networks:
-      - config-net
-      - backend-net
-      - broker-net
+    build: 
+      context: analyses-executor-service/
+    environment:
+      EUREKA_SERVER_PORT: ${EUREKA_SERVER_PORT}
+      SPRING_PROFILE: ${SPRING_PROFILE}
+  analyses-configurator-service:
+    build: 
+      context: analyses-configurator-service/
+    environment:
+      EUREKA_SERVER_PORT: ${EUREKA_SERVER_PORT}
+      SPRING_PROFILE: ${SPRING_PROFILE}
   notifications-service:
-    build:
+    build: 
       context: notifications-service/
-    networks:
-      - config-net
-      - backend-net
-      - broker-net
-      - notifications-db-net
-networks:
-  config-net:
-    external:
-      name: ${COMPOSE_PROJECT_NAME}_config-net
-  broker-net:
-    external:
-      name: ${COMPOSE_PROJECT_NAME}_broker-net
-  backend-net:
-    external:
-      name: ${COMPOSE_PROJECT_NAME}_backend-net
-  notifications-db-net:
-    external:
-      name: ${COMPOSE_PROJECT_NAME}_notifications-db-net
+    environment:
+      EUREKA_SERVER_PORT: ${EUREKA_SERVER_PORT}
+      SPRING_PROFILE: ${SPRING_PROFILE}
+  gateway:
+    build: 
+      context: gateway/
+    environment:
+      EUREKA_SERVER_PORT: ${EUREKA_SERVER_PORT}
+      SPRING_PROFILE: ${SPRING_PROFILE}
+  eureka-server:
+    build: 
+      context: eureka-server/
+    environment:
+      EUREKA_SERVER_PORT: ${EUREKA_SERVER_PORT}
+      CONFIG_SERVER_PORT: ${CONFIG_SERVER_PORT}
+  config-server:
+    build:
+      context: config-server/
+    environment:
+      CONFIG_SERVER_PORT: ${CONFIG_SERVER_PORT}
+      EUREKA_SERVER_PORT: ${EUREKA_SERVER_PORT}
+  zookeeper:
+    image: wurstmeister/zookeeper
+  kafka:
+    image: wurstmeister/kafka:0.10.1.1
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: ${KAFKA_ADVERTISED_HOST_NAME}
+      KAFKA_ADVERTISED_PORT: ${KAFKA_ADVERTISED_PORT}
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:${ZOOKEEPER_PORT}
+      KAFKA_CREATE_TOPICS: ${KAFKA_TOPICS}
+    depends_on:
+      - zookeeper

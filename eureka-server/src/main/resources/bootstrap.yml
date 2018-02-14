@@ -2,5 +2,5 @@ spring:
   cloud:
     config:
       name: eureka-server
-      uri: http://config-server:8888
+      uri: http://config-server:${CONFIG_SERVER_PORT}
       fail-fast: true

@@ -12,4 +12,4 @@ spring:
           destination: analyses
           content-type: application/json
 server:
-  port: 0
+  port: ${ANALYSES_CONFIGURATOR_SERVICE_PORT}

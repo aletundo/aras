@@ -10,10 +10,10 @@ spring:
   profiles:
      active: native
 server:
-  port: 8888
+  port: ${CONFIG_SERVER_PORT}
 eureka:
   client:
     region: default
     registryFetchIntervalSeconds: 5
     serviceUrl:
-      defaultZone: http://eureka-server:8761/eureka/
+      defaultZone: http://eureka-server:${EUREKA_SERVER_PORT}/eureka/

@@ -1,0 +1,67 @@
+version: '3.4'
+
+services:
+  analyses-executor-service:
+    environment:
+      ANALYSES_EXECUTOR_SERVICE_PORT: ${ANALYSES_EXECUTOR_SERVICE_PORT}
+    ports:
+      - "${ANALYSES_EXECUTOR_SERVICE_PORT}:${ANALYSES_EXECUTOR_SERVICE_PORT}"
+    networks:
+      - backend-net
+  analyses-configurator-service:
+    environment:
+      ANALYSES_CONFIGURATOR_SERVICE_PORT: ${ANALYSES_CONFIGURATOR_SERVICE_PORT}
+    ports:
+      - "${ANALYSES_CONFIGURATOR_SERVICE_PORT}:${ANALYSES_CONFIGURATOR_SERVICE_PORT}"
+    networks:
+      - backend-net
+  notifications-service:
+    environment:
+      NOTIFICATIONS_SERVICE_PORT: ${NOTIFICATIONS_SERVICE_PORT}
+      NOTIFICATIONS_DB_USER: ${NOTIFICATIONS_DB_USER}
+      NOTIFICATIONS_DB_PASSWORD: ${NOTIFICATIONS_DB_PASSWORD}
+      NOTIFICATIONS_DB: ${NOTIFICATIONS_DB}
+    ports:
+      - "${NOTIFICATIONS_SERVICE_PORT}:${NOTIFICATIONS_SERVICE_PORT}"
+    depends_on: 
+      - notifications-db
+    networks:
+      - notifications-db-net
+      - backend-net
+  notifications-db:
+    image: mariadb:10.2
+    environment:
+      MYSQL_ROOT_PASSWORD: ${NOTIFICATIONS_DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${NOTIFICATIONS_DB}
+      MYSQL_USER: ${NOTIFICATIONS_DB_USER}
+      MYSQL_PASSWORD: ${NOTIFICATIONS_DB_PASSWORD}
+    volumes:
+      - notifications-db-data:/var/lib/mysql
+    networks:
+      - notifications-db-net
+  gateway:
+    environment:
+      GATEWAY_PORT: ${GATEWAY_PORT}
+    ports:
+      - "${GATEWAY_PORT}:${GATEWAY_PORT}"
+    networks:
+      - backend-net
+  eureka-server:
+    networks:
+      - backend-net
+  config-server:
+    networks:
+      - backend-net
+  zookeeper:
+    networks:
+      - backend-net
+  kafka:
+    networks:
+      - backend-net
+networks:
+  backend-net:
+    driver: bridge
+  notifications-db-net:
+    driver: bridge
+volumes:
+  notifications-db-data:

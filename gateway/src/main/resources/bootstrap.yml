@@ -1,8 +1,9 @@
 spring:
+  profiles:
+    active: ${SPRING_PROFILE}
   cloud:
     config:
       name: gateway
-      # uri: http://config-server:8888
       fail-fast: true
       discovery:
         service-id: config-server
@@ -11,4 +12,4 @@ spring:
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://eureka-server:8761/eureka/
+      defaultZone: http://eureka-server:${EUREKA_SERVER_PORT}/eureka/

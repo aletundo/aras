@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    active: ${SPRING_PROFILE}
   cloud:
     config:
       name: analyses-configurator-service
@@ -10,4 +12,4 @@ spring:
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://eureka-server:8761/eureka/
+      defaultZone: http://eureka-server:${EUREKA_SERVER_PORT}/eureka/

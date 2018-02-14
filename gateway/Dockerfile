@@ -9,5 +9,4 @@ FROM openjdk:8-jre-alpine
 COPY --from=builder /home/root/build/target/*.jar \
 /srv/gateway/gateway.jar
 WORKDIR /srv/gateway/
-EXPOSE 9000
 ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "gateway.jar"]

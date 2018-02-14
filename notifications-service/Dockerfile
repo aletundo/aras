@@ -9,5 +9,4 @@ FROM openjdk:8-jre-alpine
 COPY --from=builder /home/root/build/target/*.jar \
 /srv/notifications-service/notifications-service.jar
 WORKDIR /srv/notifications-service/
-
 ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "notifications-service.jar"]
