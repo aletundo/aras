@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # ARAS documentation build configuration file, created by
-# sphinx-quickstart on Mon Feb  5 16:48:53 2018.
+# sphinx-quickstart on Sat Feb 17 18:09:23 2018.
 #
 # This file is execfile()d with the current directory set to its
 # containing dir.
@@ -20,7 +20,6 @@
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
 
-from recommonmark.parser import CommonMarkParser
 
 # -- General configuration ------------------------------------------------
 
@@ -40,11 +39,7 @@ templates_path = ['_templates']
 # You can specify multiple suffix as a list of string:
 #
 # source_suffix = ['.rst', '.md']
-source_parsers = {
-   '.md': CommonMarkParser,
-}
-
-source_suffix = ['.rst', '.md']
+source_suffix = '.rst'
 
 # The master toctree document.
 master_doc = 'index'
@@ -59,7 +54,7 @@ author = u'Alessandro Tundo, Ilaria Pigazzini, Matteo Vaghi, Cezar Sas'
 # built documents.
 #
 # The short X.Y version.
-version = u'0.1'
+version = u'0.1.0'
 # The full version, including alpha/beta/rc tags.
 release = u'0.1.0'
 
@@ -73,7 +68,7 @@ language = None
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This patterns also effect to html_static_path and html_extra_path
-exclude_patterns = []
+exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'
@@ -169,26 +164,5 @@ texinfo_documents = [
      'Miscellaneous'),
 ]
 
-
-
-# -- Options for Epub output ----------------------------------------------
-
-# Bibliographic Dublin Core info.
-epub_title = project
-epub_author = author
-epub_publisher = author
-epub_copyright = copyright
-
-# The unique identifier of the text. This can be a ISBN number
-# or the project homepage.
-#
-# epub_identifier = ''
-
-# A unique identification for the text.
-#
-# epub_uid = ''
-
-# A list of files that should not be packed into the epub file.
-epub_exclude_files = ['search.html']
 
 
