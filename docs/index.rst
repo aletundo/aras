@@ -11,6 +11,7 @@ Welcome to ARAS's documentation!
    :caption: Contents:
    
    synopsis
+   architecture_overview
    development
    authors
    license
