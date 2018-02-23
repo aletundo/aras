@@ -46,8 +46,8 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'ARAS'
-copyright = u'2018, Alessandro Tundo, Ilaria Pigazzini, Matteo Vaghi, Cezar Sas'
-author = u'Alessandro Tundo, Ilaria Pigazzini, Matteo Vaghi, Cezar Sas'
+copyright = u'2018, Ilaria Pigazzini, Cezar Sas, Alessandro Tundo, Matteo Vaghi'
+author = u'Ilaria Pigazzini, Cezar Sas, Alessandro Tundo, Matteo Vaghi'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -117,6 +117,7 @@ htmlhelp_basename = 'ARASdoc'
 # -- Options for LaTeX output ---------------------------------------------
 
 latex_elements = {
+    'classoptions': ',openany,oneside'
     # The paper size ('letterpaper' or 'a4paper').
     #
     # 'papersize': 'letterpaper',
@@ -139,7 +140,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
     (master_doc, 'ARAS.tex', u'ARAS Documentation',
-     u'Alessandro Tundo, Ilaria Pigazzini, Matteo Vaghi, Cezar Sas', 'manual'),
+     u'Ilaria Pigazzini, Cezar Sas, Alessandro Tundo, Matteo Vaghi', 'manual'),
 ]
 
 
