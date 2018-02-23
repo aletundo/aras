@@ -22,5 +22,6 @@ start them in a specific sequence.
 Execute the following steps: ::
 
   $ docker-compose build
-  $ docker-compose up -d config-server eureka-server
-  $ docker-compose up -d notifications-service analyses-configurator-service analyses-executor-service gateway
+  $ docker-compose up -d config-server kafka
+  $ docker-compose up -d eureka-server
+  $ docker-compose up -d notifications-service analyses-configurator-service analyses-executor-service projects-service reports-service gateway
