@@ -1,0 +1,18 @@
+dist: trusty
+language: java
+jdk:
+  - oraclejdk8
+  - openjdk8
+env:
+  - DIR=projects-service
+  - DIR=reports-service
+sudo: false
+jobs:
+  include:
+    - stage: compile
+      script: cd $DIR && mvn package -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+    - stage: test
+      script: cd $DIR && mvn test -B
+stages:
+  - compile
+  - test

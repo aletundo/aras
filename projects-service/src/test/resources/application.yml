@@ -1,0 +1,15 @@
+spring:
+  output:
+    ansi:
+      enabled: DETECT
+  application:
+    name: projects-service
+  cloud:
+    discovery:
+      enabled: false
+    config:
+      enabled: false
+  data:
+    mongodb:
+      port: 27017
+      database: projects
