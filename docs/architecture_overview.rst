@@ -3,7 +3,7 @@ Architecture overview
 
 The following section gives a brief overview on the architecture.
 
-.. image:: images/Components.png
+.. image:: images/Components.jpg
 
 The components which are already available are:
 
