@@ -7,8 +7,10 @@ jdk:
 env:
   - DIR=projects-service
   - DIR=reports-service
+before_install:
+  - cd $DIR
 install:
-  - cd $DIR && mvn package -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+  - mvn package -DskipTests=true -Dmaven.javadoc.skip=true -B -V
 script:
-  - cd $DIR && mvn test -B
+  - mvn test -B
   
