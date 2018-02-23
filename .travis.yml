@@ -18,5 +18,5 @@ install:
   - mvn package -DskipTests=true -Dmaven.javadoc.skip=true -B -V
 script:
   - mvn test -B
-  - sonar-scanner
+  - mvn sonar:sonar
   
