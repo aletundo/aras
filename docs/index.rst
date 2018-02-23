@@ -5,6 +5,11 @@
 
 Welcome to ARAS's documentation!
 ================================
+.. image:: https://readthedocs.org/projects/aras/badge/?version=latest
+    :target: http://aras.readthedocs.io/en/latest/?badge=latest
+    :alt: Documentation Status
+.. image:: https://travis-ci.org/aletundo/aras.svg?branch=master
+    :target: https://travis-ci.org/aletundo/aras
 
 .. toctree::
    :maxdepth: 2
