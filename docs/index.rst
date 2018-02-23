@@ -5,24 +5,8 @@
 
 Welcome to ARAS's documentation!
 ================================
-.. image:: https://readthedocs.org/projects/aras/badge/?version=latest
-    :target: http://aras.readthedocs.io/en/latest/?badge=latest
-    :alt: Documentation Status
-.. image:: https://travis-ci.org/aletundo/aras.svg?branch=master
-    :target: https://travis-ci.org/aletundo/aras
-    :alt: Build Status
 
-**projects-service quality gate**: 
-
-.. image:: https://sonarcloud.io/api/project_badges/measure?project=it.unimib.disco.aras%3Aprojects-service&metric=alert_status
-    :target: https://sonarcloud.io/organizations/aletundo-github/projects
-    :alt: projects-service Quality Gate
-
-**reports-service quality gate**:
-
-.. image:: https://sonarcloud.io/api/project_badges/measure?project=it.unimib.disco.aras%3Areports-service&metric=alert_status
-    :target: https://sonarcloud.io/organizations/aletundo-github/projects
-    :alt: reports-service Quality Gate
+You can visualize the build status `here <https://travis-ci.org/aletundo/aras>`_ and the code quality `here <https://sonarcloud.io/organizations/aletundo-github/projects>`_.
 
 .. toctree::
    :maxdepth: 2
@@ -33,11 +17,3 @@ Welcome to ARAS's documentation!
    development
    authors
    license
-
-
-.. Indices and tables
-.. ==================
-.. 
-.. * :ref:`genindex`
-.. * :ref:`modindex`
-.. * :ref:`search`
