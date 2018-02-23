@@ -10,6 +10,19 @@ Welcome to ARAS's documentation!
     :alt: Documentation Status
 .. image:: https://travis-ci.org/aletundo/aras.svg?branch=master
     :target: https://travis-ci.org/aletundo/aras
+    :alt: Build Status
+
+**projects-service quality gate**: 
+
+.. image:: https://sonarcloud.io/api/project_badges/measure?project=it.unimib.disco.aras%3Aprojects-service&metric=alert_status
+    :target: https://sonarcloud.io/organizations/aletundo-github/projects
+    :alt: projects-service Quality Gate
+
+**reports-service quality gate**:
+
+.. image:: https://sonarcloud.io/api/project_badges/measure?project=it.unimib.disco.aras%3Areports-service&metric=alert_status
+    :target: https://sonarcloud.io/organizations/aletundo-github/projects
+    :alt: reports-service Quality Gate
 
 .. toctree::
    :maxdepth: 2
