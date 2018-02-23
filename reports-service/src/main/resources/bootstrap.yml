@@ -1,0 +1,15 @@
+spring:
+  profiles:
+    active: ${SPRING_PROFILE}
+  cloud:
+    config:
+      name: reports-service
+      fail-fast: true
+      discovery:
+        service-id: config-server
+        enabled: true
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://eureka-server:${EUREKA_SERVER_PORT}/eureka/
