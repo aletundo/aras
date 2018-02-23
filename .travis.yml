@@ -4,17 +4,13 @@ jdk:
   - oraclejdk8
   - openjdk8
 sudo: false
+env:
+  - DIR=projects-service
+  - DIR=reports-service
+script: cd $DIR && mvn package -DskipTests=true -Dmaven.javadoc.skip=true -B -V
 jobs:
   include:
-    - stage: compile
-      env:
-        - DIR=projects-service
-        - DIR=reports-service
-      script: cd $DIR && mvn package -DskipTests=true -Dmaven.javadoc.skip=true -B -V
     - stage: test
-      env:
-        - DIR=projects-service
-        - DIR=reports-service
       script: cd $DIR && mvn test -B
 stages:
   - compile
