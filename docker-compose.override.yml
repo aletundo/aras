@@ -15,6 +15,20 @@ services:
       - "${ANALYSES_CONFIGURATOR_SERVICE_PORT}:${ANALYSES_CONFIGURATOR_SERVICE_PORT}"
     networks:
       - backend-net
+  projects-service:
+    environment:
+      PROJECTS_SERVICE_PORT: ${PROJECTS_SERVICE_PORT}
+    ports:
+      - "${PROJECTS_SERVICE_PORT}:${PROJECTS_SERVICE_PORT}"
+    networks:
+      - backend-net
+  reports-service:
+    environment:
+      REPORTS_SERVICE_PORT: ${REPORTS_SERVICE_PORT}
+    ports:
+      - "${REPORTS_SERVICE_PORT}:${REPORTS_SERVICE_PORT}"
+    networks:
+      - backend-net
   notifications-service:
     environment:
       NOTIFICATIONS_SERVICE_PORT: ${NOTIFICATIONS_SERVICE_PORT}

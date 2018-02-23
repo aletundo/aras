@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: reports-service
+  data:
+    mongodb:
+      port: 27017
+      database: reports
+server:
+  port: ${REPORTS_SERVICE_PORT}

@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: projects-service
+  data:
+    mongodb:
+      port: 27017
+      database: projects
+server:
+  port: ${PROJECTS_SERVICE_PORT}

@@ -13,6 +13,18 @@ services:
     environment:
       EUREKA_SERVER_PORT: ${EUREKA_SERVER_PORT}
       SPRING_PROFILE: ${SPRING_PROFILE}
+  projects-service:
+    build:
+      context: projects-service/
+    environment:
+      EUREKA_SERVER_PORT: ${EUREKA_SERVER_PORT}
+      SPRING_PROFILE: ${SPRING_PROFILE}
+  reports-service:
+    build:
+      context: reports-service/
+    environment:
+      EUREKA_SERVER_PORT: ${EUREKA_SERVER_PORT}
+      SPRING_PROFILE: ${SPRING_PROFILE}
   notifications-service:
     build: 
       context: notifications-service/
