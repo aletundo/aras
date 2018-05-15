@@ -1,7 +1,6 @@
 # Builder image
-FROM maven:3.5-jdk-8 as builder
+FROM maven:3.5-jdk-8-alpine as builder
 WORKDIR /home/root/build/notifications-service/
-ENV MAVEN_OPTS=-Dmaven.repo.local=../.m2/
 COPY pom.xml .
 RUN mvn -B -C -T 1C org.apache.maven.plugins:maven-dependency-plugin:3.0.2:go-offline
 COPY . .
