@@ -6,8 +6,20 @@ services:
       ANALYSES_EXECUTOR_SERVICE_PORT: ${ANALYSES_EXECUTOR_SERVICE_PORT}
     ports:
       - "${ANALYSES_EXECUTOR_SERVICE_PORT}:${ANALYSES_EXECUTOR_SERVICE_PORT}"
+    depends_on: 
+      - analyses-executor-mongodb
     networks:
+      - analyses-executor-mongodb-net
       - backend-net
+  analyses-executor-mongodb:
+    image: mongo:3.7
+    environment:
+      MONGO_INITDB_DATABASE: analyses-executor
+    networks:
+      - analyses-executor-mongodb-net
+    volumes:
+      - analyses-executor-mongodb-configdb:/data/configdb
+      - analyses-executor-mongodb-db:/data/db
   analyses-configurator-service:
     environment:
       ANALYSES_CONFIGURATOR_SERVICE_PORT: ${ANALYSES_CONFIGURATOR_SERVICE_PORT}
@@ -77,5 +89,9 @@ networks:
     driver: bridge
   notifications-db-net:
     driver: bridge
+  analyses-executor-mongodb-net:
+    driver: bridge
 volumes:
   notifications-db-data:
+  analyses-executor-mongodb-db:
+  analyses-executor-mongodb-configdb:
