@@ -11,6 +11,10 @@ services:
     networks:
       - analyses-executor-mongodb-net
       - backend-net
+    volumes:
+      - type: bind
+        source: ./analyses-executor-service/data
+        target: /data
   analyses-executor-mongodb:
     image: mongo:3.7
     environment:
