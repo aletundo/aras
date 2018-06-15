@@ -8,18 +8,17 @@ spring:
           brokers: kafka
           zkNodes: zookeeper
       bindings:
-        output:
-          destination: analyses
-          content-type: application/json
-        input:
+        analyses-in:
           group: analysesGroup
           destination: analyses
-          content-type: application/json
-      default:
-        consumer:
-          headerMode: raw
-        producer:
-          headerMode: raw
+          contentType: application/json
+          consumer:
+            headerMode: raw
+        analyses-out:
+          destination: analyses
+          contentType: application/json
+          producer:
+            headerMode: raw
   data:
     mongodb:
       uri: "mongodb://analyses-executor-mongodb:27017/analyses-executor"
