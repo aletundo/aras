@@ -14,6 +14,5 @@ public class Analysis {
 	private String id;
 	private Date startTime;
 	private Date endTime;
-	private String projectId;
-	private String projectVersion;
+	private AnalysisConfiguration configuration;
 }

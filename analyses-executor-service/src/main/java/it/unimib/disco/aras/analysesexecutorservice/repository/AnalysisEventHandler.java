@@ -18,8 +18,8 @@ public class AnalysisEventHandler {
     private Producer<Analysis> producer;
     
     @HandleAfterCreate
-    public void handleAnalysisConfigurationCreated(Analysis analysis) {
-        log.info("Configuration with id: " + analysis.getId() + " saved!");
+    public void handleAnalysisCreated(Analysis analysis) {
+        log.info("Analysis with id: " + analysis.getId() + " saved!");
         producer.dispatch(analysis);
     }
 
