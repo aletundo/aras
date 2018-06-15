@@ -11,6 +11,10 @@ spring:
         output:
           destination: analyses
           content-type: application/json
+        input:
+          group: analysesGroup
+          destination: analyses
+          content-type: application/json
       default:
         consumer:
           headerMode: raw
