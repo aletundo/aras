@@ -11,6 +11,11 @@ spring:
         output:
           destination: analyses
           content-type: application/json
+      default:
+        consumer:
+          headerMode: raw
+        producer:
+          headerMode: raw
   data:
     mongodb:
       uri: "mongodb://analyses-executor-mongodb:27017/analyses-executor"

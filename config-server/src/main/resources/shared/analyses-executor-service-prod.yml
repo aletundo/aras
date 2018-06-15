@@ -11,5 +11,10 @@ spring:
         output:
           destination: analyses
           content-type: application/json
+      default:
+        consumer:
+          headerMode: raw
+        producer:
+          headerMode: raw
 server:
   port: 0
