@@ -21,6 +21,6 @@ spring:
             headerMode: raw
   data:
     mongodb:
-      uri: "mongodb://analyses-executor-mongodb:27017/analyses-executor"
+      uri: ${SHARED_MONGODB_URI}/analyses-executor
 server:
   port: ${ANALYSES_EXECUTOR_SERVICE_PORT}

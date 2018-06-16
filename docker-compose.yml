@@ -7,6 +7,7 @@ services:
     environment:
       EUREKA_SERVER_PORT: ${EUREKA_SERVER_PORT}
       SPRING_PROFILE: ${SPRING_PROFILE}
+      SHARED_MONGODB_URI: ${SHARED_MONGODB_URI}
   analyses-configurator-service:
     build: 
       context: analyses-configurator-service/
