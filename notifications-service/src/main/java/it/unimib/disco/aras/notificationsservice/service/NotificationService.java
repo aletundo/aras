@@ -13,21 +13,25 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Slf4j
 public class NotificationService {
-	
+
 	@Autowired
 	private Producer<NotificationMessage> notificationProducer;
-	
+
 	@Autowired
 	private NotificationRepository notificationRepository;
-	
+
+	@Autowired
+	private EmailService emailService;
+
 	public void sendAnalysisStatusNotification(AnalysisMessage analysis) {
-		// TODO: 
+		// TODO:
 		// - get subscribers
 		// - get subscribers' channels
 		// - store notification
 		// - run a dedicated job for each channel (eg. QuartzJob)
 		// - dispatch a NotificationMessage on Kafka
-		
-		notificationProducer.dispatch(NotificationMessage.build("", NotificationType.STATUS));
+		emailService.sendSimpleMessage(System.getenv("NOTIFICATIONS_TO_ADDRESS_DEV"), "[ARAS] Analysis status notification",
+				"The analysis with id " + analysis.getId() + " is on status " + analysis.getStatus());
+		notificationProducer.dispatch(NotificationMessage.build("5b25497c75a527000141660d", NotificationType.STATUS));
 	}
 }

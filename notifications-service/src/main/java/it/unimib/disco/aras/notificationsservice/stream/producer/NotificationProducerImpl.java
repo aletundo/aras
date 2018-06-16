@@ -24,7 +24,7 @@ public class NotificationProducerImpl implements Producer<NotificationMessage> {
 
 		messageChannel.send(MessageBuilder.withPayload(notification)
 				.setHeader(MessageHeaders.CONTENT_TYPE, MimeTypeUtils.APPLICATION_JSON).build());
-		log.debug("Notification message about notification " + notification.getId() + " dispatched!");
+		log.info("Notification message about notification " + notification.getId() + " dispatched!");
 	}
 
 }
