@@ -1,14 +1,6 @@
 spring:
   application:
     name: notifications-service
-  jpa:
-    hibernate:
-      ddl-auto: none
-  datasource:
-    url: jdbc:mariadb://notifications-db:3306/${NOTIFICATIONS_DB}
-    username: ${NOTIFICATIONS_DB_USER}
-    password: ${NOTIFICATIONS_DB_PASSWORD}
-    driver-class-name: org.mariadb.jdbc.Driver
   cloud:
     stream:
       kafka:
@@ -16,9 +8,25 @@ spring:
           brokers: kafka
           zkNodes: zookeeper
       bindings:
-        input:
-          group: analysesGroup
+        analyses-in:
+          group: notificationsGroup
           destination: analyses
-          content-type: application/json
+          contentType: application/json
+          consumer:
+            headerMode: raw
+        notifications-out:
+          destination: notifications
+          contentType: application/json
+          producer:
+            headerMode: raw
+        reports-in:
+          group: notificationsGroup
+          destination: reports
+          contentType: application/json
+          consumer:
+            headerMode: raw
+  data:
+    mongodb:
+      uri: ${SHARED_MONGODB_URI}/notifications
 server:
   port: ${NOTIFICATIONS_SERVICE_PORT}

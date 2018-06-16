@@ -15,13 +15,6 @@ services:
       - type: bind
         source: ./analyses-executor-service/data
         target: /data
-  shared-mongodb:
-    image: mongo:3.7
-    networks:
-      - shared-mongodb-net
-    volumes:
-      - shared-mongodb-configdb:/data/configdb
-      - shared-mongodb-db:/data/db
   analyses-configurator-service:
     environment:
       ANALYSES_CONFIGURATOR_SERVICE_PORT: ${ANALYSES_CONFIGURATOR_SERVICE_PORT}
@@ -46,27 +39,13 @@ services:
   notifications-service:
     environment:
       NOTIFICATIONS_SERVICE_PORT: ${NOTIFICATIONS_SERVICE_PORT}
-      NOTIFICATIONS_DB_USER: ${NOTIFICATIONS_DB_USER}
-      NOTIFICATIONS_DB_PASSWORD: ${NOTIFICATIONS_DB_PASSWORD}
-      NOTIFICATIONS_DB: ${NOTIFICATIONS_DB}
     ports:
       - "${NOTIFICATIONS_SERVICE_PORT}:${NOTIFICATIONS_SERVICE_PORT}"
     depends_on: 
-      - notifications-db
+      - shared-mongodb
     networks:
-      - notifications-db-net
+      - shared-mongodb-net
       - backend-net
-  notifications-db:
-    image: mariadb:10.2
-    environment:
-      MYSQL_ROOT_PASSWORD: ${NOTIFICATIONS_DB_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${NOTIFICATIONS_DB}
-      MYSQL_USER: ${NOTIFICATIONS_DB_USER}
-      MYSQL_PASSWORD: ${NOTIFICATIONS_DB_PASSWORD}
-    volumes:
-      - notifications-db-data:/var/lib/mysql
-    networks:
-      - notifications-db-net
   gateway:
     environment:
       GATEWAY_PORT: ${GATEWAY_PORT}
@@ -80,20 +59,28 @@ services:
   config-server:
     networks:
       - backend-net
+    volumes:
+      - type: bind
+        source: ./config-server/src/main/resources/shared
+        target: /srv/config-server/shared
   zookeeper:
     networks:
       - backend-net
   kafka:
     networks:
       - backend-net
+  shared-mongodb:
+    image: mongo:3.7
+    networks:
+      - shared-mongodb-net
+    volumes:
+      - shared-mongodb-configdb:/data/configdb
+      - shared-mongodb-db:/data/db
 networks:
   backend-net:
-    driver: bridge
-  notifications-db-net:
     driver: bridge
   shared-mongodb-net:
     driver: bridge
 volumes:
-  notifications-db-data:
   shared-mongodb-db:
   shared-mongodb-configdb:
