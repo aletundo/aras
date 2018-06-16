@@ -8,6 +8,12 @@ RUN mvn -B -o -T 1C package -DskipTests
 
 # Executer image
 FROM openjdk:8-jre-alpine
+
+RUN apk update && apk add tzdata
+RUN cp /usr/share/zoneinfo/Europe/Rome /etc/localtime
+RUN echo "Europe/Rome" >  /etc/timezone
+RUN apk del tzdata
+
 COPY --from=builder /home/root/build/gateway/target/*.jar \
 /srv/gateway/gateway.jar
 WORKDIR /srv/gateway/
