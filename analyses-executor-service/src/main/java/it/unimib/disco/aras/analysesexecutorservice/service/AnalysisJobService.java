@@ -12,6 +12,10 @@ import org.springframework.stereotype.Service;
 
 import it.unimib.disco.aras.analysesexecutorservice.entity.Analysis;
 import it.unimib.disco.aras.analysesexecutorservice.job.AnalysisJob;
+import it.unimib.disco.aras.analysesexecutorservice.repository.AnalysisRepository;
+import it.unimib.disco.aras.analysesexecutorservice.stream.message.AnalysisMessage;
+import it.unimib.disco.aras.analysesexecutorservice.stream.message.AnalysisStatus;
+import it.unimib.disco.aras.analysesexecutorservice.stream.producer.Producer;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -21,12 +25,19 @@ public class AnalysisJobService {
 	@Autowired
 	private Scheduler scheduler;
 	
-	public void createJob(Analysis analysis) {
+	@Autowired
+	private AnalysisRepository analysisRepository;
+	
+	@Autowired
+	private Producer<AnalysisMessage> analysisProducer;
+	
+	public void createJob(final String analysisId) {
 		try {
+			final Analysis analysis = analysisRepository.findById(analysisId).orElseThrow(() -> new SchedulerException());
 			JobDataMap jobDataMap = new JobDataMap();
 			jobDataMap.put("analysis", analysis);
 			JobDetail job = JobBuilder.newJob(AnalysisJob.class)
-					  .withIdentity(analysis.getId(), analysis.getConfiguration().getProjectId() + "-" + analysis.getConfiguration().getVersionId())
+					  .withIdentity(analysisId, analysis.getConfiguration().getProjectId() + "-" + analysis.getConfiguration().getVersionId())
 					  .setJobData(jobDataMap)
 					  .build();
 			Trigger trigger = TriggerBuilder.newTrigger()
@@ -34,9 +45,11 @@ public class AnalysisJobService {
 					  .startAt(analysis.getStartTime())
 					  .build();
 			scheduler.scheduleJob(job, trigger);
-			log.info("Scheduled analysis with id: " + analysis.getId());
+			analysisProducer.dispatch(AnalysisMessage.build(analysisId, analysis.getConfiguration().getProjectId(), analysis.getConfiguration().getVersionId(), AnalysisStatus.SCHEDULED));
+			log.info("Scheduled analysis with id: " + analysisId);
 		} catch (SchedulerException e) {
-			log.error("Failed to schedule analysis with id: " + analysis.getId());
+			analysisProducer.dispatch(AnalysisMessage.build(analysisId, "", "", AnalysisStatus.FAILED));
+			log.error("Failed to schedule analysis with id: " + analysisId);
 		}
 	}
 }
