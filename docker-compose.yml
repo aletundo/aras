@@ -33,6 +33,12 @@ services:
       EUREKA_SERVER_PORT: ${EUREKA_SERVER_PORT}
       SPRING_PROFILE: ${SPRING_PROFILE}
       SHARED_MONGODB_URI: ${SHARED_MONGODB_URI}
+      SMTP_HOST: ${SMTP_HOST}
+      SMTP_PORT: ${SMTP_PORT}
+      SMTP_USER: ${SMTP_USER}
+      SMTP_PASSWORD: ${SMTP_PASSWORD}
+      SMTP_AUTH: ${SMTP_AUTH}
+      SMTP_STARTTLS: ${SMTP_STARTTLS}
   gateway:
     build: 
       context: gateway/
