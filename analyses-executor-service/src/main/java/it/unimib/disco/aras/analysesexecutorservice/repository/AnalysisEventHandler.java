@@ -6,7 +6,7 @@ import org.springframework.data.rest.core.annotation.RepositoryEventHandler;
 import org.springframework.stereotype.Service;
 
 import it.unimib.disco.aras.analysesexecutorservice.entity.Analysis;
-import it.unimib.disco.aras.analysesexecutorservice.producer.Producer;
+import it.unimib.disco.aras.analysesexecutorservice.stream.producer.Producer;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
