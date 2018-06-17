@@ -12,6 +12,8 @@ jdk:
 env:
   - DIR=projects-service
   - DIR=reports-service
+  - DIR=analyses-executor-service
+  - DIR=notifications-service
 before_install:
   - cd $DIR
 install:
