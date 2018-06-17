@@ -1,0 +1,14 @@
+spring:
+  output:
+    ansi:
+      enabled: DETECT
+  application:
+    name: gateway
+  cloud:
+    config:
+      discovery:
+        enabled: false
+      enabled: false
+eureka:
+  client:
+    enabled: false
