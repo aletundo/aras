@@ -11,5 +11,8 @@ spring:
         output:
           destination: analyses
           content-type: application/json
+  data:
+    mongodb:
+      uri: ${SHARED_MONGODB_URI}/analyses-configurator
 server:
   port: ${ANALYSES_CONFIGURATOR_SERVICE_PORT}
