@@ -20,7 +20,10 @@ services:
       ANALYSES_CONFIGURATOR_SERVICE_PORT: ${ANALYSES_CONFIGURATOR_SERVICE_PORT}
     ports:
       - "${ANALYSES_CONFIGURATOR_SERVICE_PORT}:${ANALYSES_CONFIGURATOR_SERVICE_PORT}"
+    depends_on: 
+      - shared-mongodb
     networks:
+      - shared-mongodb-net
       - backend-net
   projects-service:
     environment:
