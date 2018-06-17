@@ -1,0 +1,28 @@
+spring:
+  output:
+    ansi:
+      enabled: DETECT
+  application:
+    name: notifications-service
+  cloud:
+    config:
+      discovery:
+        enabled: false
+      enabled: false
+  data:
+    mongodb:
+      uri: "mongodb://localhost:27017/notifications"
+  mail:
+    host: smtp.example.com
+    port: 587
+    username: user@example.com
+    password: secret
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+eureka:
+  client:
+    enabled: false
