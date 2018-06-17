@@ -70,6 +70,8 @@ services:
     networks:
       - backend-net
   eureka-server:
+    ports:
+      - "${EUREKA_SERVER_PORT}:${EUREKA_SERVER_PORT}"
     networks:
       - backend-net
   config-server:
