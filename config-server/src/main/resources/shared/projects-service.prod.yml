@@ -1,5 +1,8 @@
 spring:
   application:
     name: projects-service
+  data:
+    mongodb:
+      uri: ${SHARED_MONGODB_URI}/projects
 server:
   port: 0

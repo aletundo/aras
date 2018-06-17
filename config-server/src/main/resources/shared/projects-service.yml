@@ -3,7 +3,6 @@ spring:
     name: projects-service
   data:
     mongodb:
-      port: 27017
-      database: projects
+      uri: ${SHARED_MONGODB_URI}/projects
 server:
   port: ${PROJECTS_SERVICE_PORT}
