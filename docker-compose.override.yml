@@ -27,7 +27,10 @@ services:
       PROJECTS_SERVICE_PORT: ${PROJECTS_SERVICE_PORT}
     ports:
       - "${PROJECTS_SERVICE_PORT}:${PROJECTS_SERVICE_PORT}"
+    depends_on: 
+      - shared-mongodb
     networks:
+      - shared-mongodb-net
       - backend-net
   reports-service:
     environment:
