@@ -5,11 +5,14 @@ spring:
   application:
     name: reports-service
   cloud:
-    discovery:
-      enabled: false
     config:
+      discovery:
+        enabled: false
       enabled: false
   data:
     mongodb:
-      port: 27017
-      database: reports
+      uri: "mongodb://localhost:27017/reports"
+      
+eureka:
+  client:
+    enabled: false
