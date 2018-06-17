@@ -1,5 +1,8 @@
 spring:
   application:
     name: reports-service
+  data:
+    mongodb:
+      uri: ${SHARED_MONGODB_URI}/reports
 server:
   port: 0
