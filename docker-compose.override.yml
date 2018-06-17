@@ -34,7 +34,10 @@ services:
       REPORTS_SERVICE_PORT: ${REPORTS_SERVICE_PORT}
     ports:
       - "${REPORTS_SERVICE_PORT}:${REPORTS_SERVICE_PORT}"
+    depends_on: 
+      - shared-mongodb
     networks:
+      - shared-mongodb-net
       - backend-net
   notifications-service:
     environment:
