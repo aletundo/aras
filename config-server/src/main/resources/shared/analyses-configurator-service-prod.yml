@@ -8,9 +8,11 @@ spring:
           brokers: kafka
           zkNodes: zookeeper
       bindings:
-        output:
-          destination: analyses
+        analysis-configurations-out:
+          destination: configurations
           content-type: application/json
+          producer:
+            headerMode: headers
   data:
     mongodb:
       uri: ${SHARED_MONGODB_URI}/analyses-configurator
