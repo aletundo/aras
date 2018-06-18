@@ -13,12 +13,12 @@ spring:
           destination: analyses
           contentType: application/json
           consumer:
-            headerMode: raw
+            headerMode: headers
         analyses-out:
           destination: analyses
           contentType: application/json
           producer:
-            headerMode: raw
+            headerMode: headers
   data:
     mongodb:
       uri: ${SHARED_MONGODB_URI}/analyses-executor
