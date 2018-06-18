@@ -19,6 +19,8 @@ Minimum requirements:
 Since there are shared dependencies among services, it is strongly suggested (read it as *you have to*) 
 start them in a specific sequence.
 
+First, copy ``.env.example`` to ``.env`` and substitute the values accordingly to your needs.
+
 Execute the following steps: ::
 
   $ docker-compose build
