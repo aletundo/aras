@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 @Data
 @NoArgsConstructor
@@ -24,4 +25,13 @@ public class Project {
 	@LastModifiedDate
 	private Date updatedAt;
 	private List<Version> versions;
+	
+	public Version getVersion(@NonNull String versionId) {
+		for(Version v : this.versions) {
+			if(versionId.equals(v.getId())) {
+				return v;
+			}
+		}
+		return null;
+	}
 }

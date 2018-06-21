@@ -14,11 +14,9 @@ import org.springframework.stereotype.Service;
 
 import it.unimib.disco.aras.projectsservice.entity.Project;
 import it.unimib.disco.aras.projectsservice.entity.Version;
-import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RepositoryEventHandler(Project.class)
-@Slf4j
 public class ProjectEventHandler {
 
 	@Autowired
@@ -41,7 +39,7 @@ public class ProjectEventHandler {
 				v.setId(new ObjectId().toString());
 				v.setCreatedAt(now);
 				v.setUpdatedAt(now);
-			} else if(!currentProject.getVersions().contains(v)) {
+			} else if(isDirty(currentProject.getVersions(), v)) {
 				v.setUpdatedAt(now);
 			}
 			return v;
@@ -79,5 +77,15 @@ public class ProjectEventHandler {
 //		}
 //		
 //		project.setVersions(updatedOrAdded);
+	}
+	
+	private boolean isDirty(List<Version> currentVersions, Version v) {
+		boolean isDirty = false;
+		for(Version cv : currentVersions) {
+			if(cv.getId().equals(v.getId()) && !cv.equals(v)) {
+				isDirty = true;
+			}
+		}
+		return isDirty || !currentVersions.contains(v);
 	}
 }

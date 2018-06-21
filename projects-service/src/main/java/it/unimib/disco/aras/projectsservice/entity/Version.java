@@ -18,5 +18,5 @@ public class Version {
 	private Date createdAt;
 	private Date updatedAt;
 	private String versionTag;
-	private String artifactsPath;
+	private String artefactsPath;
 }
