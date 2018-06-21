@@ -35,6 +35,10 @@ services:
     networks:
       - shared-mongodb-net
       - backend-net
+    volumes:
+      - type: bind
+        source: ./projects-service/data
+        target: /data
   reports-service:
     environment:
       REPORTS_SERVICE_PORT: ${REPORTS_SERVICE_PORT}

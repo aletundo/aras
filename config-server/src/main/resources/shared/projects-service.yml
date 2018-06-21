@@ -4,5 +4,11 @@ spring:
   data:
     mongodb:
       uri: ${SHARED_MONGODB_URI}/projects
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 500MB
+      max-request-size: 600MB
+      location: /tmp
 server:
   port: ${PROJECTS_SERVICE_PORT}

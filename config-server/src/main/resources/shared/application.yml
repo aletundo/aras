@@ -10,3 +10,4 @@ spring:
   output:
     ansi:
       enabled: DETECT
+debug: ${DEBUG}

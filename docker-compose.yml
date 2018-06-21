@@ -8,6 +8,7 @@ services:
       EUREKA_SERVER_PORT: ${EUREKA_SERVER_PORT}
       SPRING_PROFILE: ${SPRING_PROFILE}
       SHARED_MONGODB_URI: ${SHARED_MONGODB_URI}
+      DEBUG: ${DEBUG}
   analyses-configurator-service:
     build: 
       context: analyses-configurator-service/
@@ -15,6 +16,7 @@ services:
       EUREKA_SERVER_PORT: ${EUREKA_SERVER_PORT}
       SPRING_PROFILE: ${SPRING_PROFILE}
       SHARED_MONGODB_URI: ${SHARED_MONGODB_URI}
+      DEBUG: ${DEBUG}
   projects-service:
     build:
       context: projects-service/
@@ -22,6 +24,7 @@ services:
       EUREKA_SERVER_PORT: ${EUREKA_SERVER_PORT}
       SPRING_PROFILE: ${SPRING_PROFILE}
       SHARED_MONGODB_URI: ${SHARED_MONGODB_URI}
+      DEBUG: ${DEBUG}
   reports-service:
     build:
       context: reports-service/
@@ -29,6 +32,7 @@ services:
       EUREKA_SERVER_PORT: ${EUREKA_SERVER_PORT}
       SPRING_PROFILE: ${SPRING_PROFILE}
       SHARED_MONGODB_URI: ${SHARED_MONGODB_URI}
+      DEBUG: ${DEBUG}
   notifications-service:
     build: 
       context: notifications-service/
@@ -42,24 +46,28 @@ services:
       SMTP_PASSWORD: ${SMTP_PASSWORD}
       SMTP_AUTH: ${SMTP_AUTH}
       SMTP_STARTTLS: ${SMTP_STARTTLS}
+      DEBUG: ${DEBUG}
   gateway:
     build: 
       context: gateway/
     environment:
       EUREKA_SERVER_PORT: ${EUREKA_SERVER_PORT}
       SPRING_PROFILE: ${SPRING_PROFILE}
+      DEBUG: ${DEBUG}
   eureka-server:
     build: 
       context: eureka-server/
     environment:
       EUREKA_SERVER_PORT: ${EUREKA_SERVER_PORT}
       CONFIG_SERVER_PORT: ${CONFIG_SERVER_PORT}
+      DEBUG: ${DEBUG}
   config-server:
     build:
       context: config-server/
     environment:
       CONFIG_SERVER_PORT: ${CONFIG_SERVER_PORT}
       EUREKA_SERVER_PORT: ${EUREKA_SERVER_PORT}
+      DEBUG: ${DEBUG}
   zookeeper:
     image: wurstmeister/zookeeper
   kafka:
