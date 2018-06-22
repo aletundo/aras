@@ -6,6 +6,7 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
 
 import it.unimib.disco.aras.analysesexecutorservice.service.AnalysisJobService;
+import it.unimib.disco.aras.analysesexecutorservice.service.AnalysisResultsService;
 import it.unimib.disco.aras.analysesexecutorservice.stream.AnalysesStream;
 import it.unimib.disco.aras.analysesexecutorservice.stream.message.AnalysisMessage;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +18,10 @@ public class AnalysisConsumerImpl implements Consumer<AnalysisMessage> {
 	@Autowired
 	private AnalysisJobService analysisJobService;
 	
-	@StreamListener(AnalysesStream.INPUT)
+	@Autowired
+	private AnalysisResultsService analysisResultsService;
+	
+	@StreamListener(AnalysesStream.ANALYSES_INPUT)
 	public void consume(@Payload AnalysisMessage analysis) {
 		log.debug("Analysis message about analysis " + analysis.getId() + " consumed!");
 		switch(analysis.getStatus()){
@@ -25,6 +29,7 @@ public class AnalysisConsumerImpl implements Consumer<AnalysisMessage> {
 			analysisJobService.createJob(analysis.getId());
 			break;
 		case COMPLETED:
+			analysisResultsService.createResults(analysis.getId());
 			break;
 		case FAILED:
 			break;

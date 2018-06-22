@@ -21,7 +21,7 @@ public class AnalysisEventHandler {
 
 	@HandleAfterCreate
 	public void handleAnalysisCreated(Analysis analysis) {
-		log.info("Analysis with id: " + analysis.getId() + " saved!");
+		log.debug("Analysis with id: " + analysis.getId() + " saved!");
 		AnalysisMessage analysisMessage = AnalysisMessage.build(analysis.getId(),
 				analysis.getConfiguration().getProjectId(), analysis.getConfiguration().getVersionId(),
 				AnalysisStatus.CREATED);

@@ -62,6 +62,22 @@ public class AnalysisJob extends QuartzJobBean {
 				"Analysis job for project with id: " + analysis.getConfiguration().getProjectId() + " is running now!");
 		runAnalysis(analysis);
 	}
+
+	private void runAnalysis(Analysis analysis) {
+		projectId = analysis.getConfiguration().getProjectId();
+		versionId = analysis.getConfiguration().getVersionId();
+		analysisId = analysis.getId();
+
+		analysisDir = new File(ANALYSES_DIR + analysis.getId());
+		analysisDir.mkdirs();
+
+		artefactsDownloadService.downloadArtefacts(projectId, versionId)
+		.subscribe(artefacts -> {
+			prepareArtefacts(artefacts);
+			InterfaceModel interfaceModel = configureArcan();
+			runArcanDetection(interfaceModel);
+		});
+	}
 	
 	private void prepareArtefacts(Resource artefacts) {
 		InputStream inputStream = null;
@@ -112,21 +128,5 @@ public class AnalysisJob extends QuartzJobBean {
 		} finally {
 			interfaceModel.closeGraph();
 		}
-	}
-
-	private void runAnalysis(Analysis analysis) {
-		projectId = analysis.getConfiguration().getProjectId();
-		versionId = analysis.getConfiguration().getVersionId();
-		analysisId = analysis.getId();
-
-		analysisDir = new File(ANALYSES_DIR + analysis.getId());
-		analysisDir.mkdirs();
-
-		artefactsDownloadService.downloadArtefacts(projectId, versionId)
-		.subscribe(artefacts -> {
-			prepareArtefacts(artefacts);
-			InterfaceModel interfaceModel = configureArcan();
-			runArcanDetection(interfaceModel);
-		});
 	}
 }
