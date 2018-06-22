@@ -1,8 +1,15 @@
 package it.unimib.disco.aras.analysesexecutorservice.service;
 
+import java.net.MalformedURLException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.data.rest.core.event.AfterCreateEvent;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import it.unimib.disco.aras.analysesexecutorservice.entity.AnalysisResults;
@@ -16,10 +23,10 @@ import net.lingala.zip4j.util.Zip4jConstants;
 @Service
 @Slf4j
 public class AnalysisResultsService {
-	
+
 	@Autowired
 	private ApplicationEventPublisher publisher;
-	
+
 	@Autowired
 	private AnalysisResultsRepository analysisResultsRepository;
 
@@ -32,15 +39,29 @@ public class AnalysisResultsService {
 					.build();
 			analysisResultsRepository.save(analysisResults);
 			publisher.publishEvent(new AfterCreateEvent(analysisResults));
-		} catch(RuntimeException e) {
+		} catch (RuntimeException e) {
 			log.error("Failed to create results for analysis {}", analysisId);
+		}
+	}
+
+	public Resource loadResults(String analysisResultsId) throws MalformedURLException, ResourceNotFoundException {
+		AnalysisResults analysisResults = analysisResultsRepository.findById(analysisResultsId)
+				.orElseThrow(() -> new ResourceNotFoundException());
+
+		Path filepath = Paths.get(analysisResults.getResultsPath()).toAbsolutePath().normalize();
+		Resource resource = new UrlResource(filepath.toUri());
+
+		if (resource.exists()) {
+			return resource;
+		} else {
+			throw new ResourceNotFoundException();
 		}
 	}
 
 	private String zipResultCSVFiles(String analysisId) throws RuntimeException {
 		String resultsDir = ANALYSES_DIR + analysisId + "/results/";
 		String zipFilepath = resultsDir + "results.zip";
-		
+
 		try {
 			ZipFile zipFile = new ZipFile(zipFilepath);
 			ZipParameters parameters = new ZipParameters();
