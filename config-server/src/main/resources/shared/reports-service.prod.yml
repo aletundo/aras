@@ -1,6 +1,24 @@
 spring:
   application:
     name: reports-service
+  cloud:
+    stream:
+      kafka:
+        binder:
+          brokers: kafka
+          zkNodes: zookeeper
+      bindings:
+        results-in:
+          group: reportsGroup
+          destination: analysis-reports
+          contentType: application/json
+          consumer:
+            headerMode: headers
+        reports-out:
+          destination: reports
+          contentType: application/json
+          producer:
+            headerMode: headers
   data:
     mongodb:
       uri: ${SHARED_MONGODB_URI}/reports
