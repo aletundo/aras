@@ -8,12 +8,9 @@ import org.springframework.messaging.SubscribableChannel;
 public interface AnalysesStream {
     final String ANALYSES_INPUT = "analyses-in";
     final String ANALYSES_OUTPUT = "analyses-out";
-    final String RESULTS_OUTPUT = "results-out";
 
     @Input(ANALYSES_INPUT)
     SubscribableChannel inboundAnalyses();
     @Output(ANALYSES_OUTPUT)
     MessageChannel outboundAnalyses();
-    @Output(RESULTS_OUTPUT)
-    MessageChannel outboundResults();
 }

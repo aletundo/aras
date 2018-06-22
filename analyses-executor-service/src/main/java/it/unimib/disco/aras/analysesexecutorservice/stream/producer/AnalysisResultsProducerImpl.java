@@ -7,7 +7,7 @@ import org.springframework.messaging.MessageHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MimeTypeUtils;
 
-import it.unimib.disco.aras.analysesexecutorservice.stream.AnalysesStream;
+import it.unimib.disco.aras.analysesexecutorservice.stream.AnalysisResultsStream;
 import it.unimib.disco.aras.analysesexecutorservice.stream.message.AnalysisResultsMessage;
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,11 +16,11 @@ import lombok.extern.slf4j.Slf4j;
 public class AnalysisResultsProducerImpl implements Producer<AnalysisResultsMessage> {
 
 	@Autowired
-	private AnalysesStream analysesStreams;
+	private AnalysisResultsStream analysisResultsStreams;
 
 	@Override
 	public void dispatch(final AnalysisResultsMessage analysisResults) {
-		MessageChannel messageChannel = analysesStreams.outboundResults();
+		MessageChannel messageChannel = analysisResultsStreams.outboundResults();
 
 		messageChannel.send(MessageBuilder.withPayload(analysisResults)
 				.setHeader(MessageHeaders.CONTENT_TYPE, MimeTypeUtils.APPLICATION_JSON).build());
