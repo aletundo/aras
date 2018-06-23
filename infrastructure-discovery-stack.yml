@@ -1,0 +1,9 @@
+version: '3.4'
+
+services:
+  eureka-server:
+    image: discoaras/eureka-server
+    environment:
+      EUREKA_SERVER_PORT: ${EUREKA_SERVER_PORT}
+      CONFIG_SERVER_PORT: ${CONFIG_SERVER_PORT}
+      DEBUG: ${DEBUG}
