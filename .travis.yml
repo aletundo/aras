@@ -1,11 +1,13 @@
 dist: trusty
 language: java
-sudo: false
+sudo: required
 addons:
   sonarcloud:
     organization: "aletundo-github"
     token:
       secure: $SONAR_TOKEN
+services:
+  - docker
 jdk:
   - oraclejdk8
   - openjdk8
@@ -22,4 +24,7 @@ install:
 script:
   - mvn test -B
   - mvn sonar:sonar
+  - docker build -t discoaras/$DIR:$COMMIT .
+  - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
+  - docker push discoaras/$DIR
   
