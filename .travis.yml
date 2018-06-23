@@ -26,7 +26,7 @@ install:
 script:
   - mvn test -B
   - mvn sonar:sonar
-  - docker build --pull --cache-from discoaras/$DIR -t discoaras/$DIR:${TRAVIS_COMMIT::8} .
+  - docker build --pull --cache-from discoaras/$DIR -t discoaras/$DIR:latest .
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
   - docker push discoaras/$DIR
   
