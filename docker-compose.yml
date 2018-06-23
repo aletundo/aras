@@ -49,7 +49,7 @@ services:
       SPRING_PROFILE: ${SPRING_PROFILE}
       DEBUG: ${DEBUG}
   eureka-server:
-    image: discoaras/analyses-executor-service
+    image: discoaras/eureka-server
     environment:
       EUREKA_SERVER_PORT: ${EUREKA_SERVER_PORT}
       CONFIG_SERVER_PORT: ${CONFIG_SERVER_PORT}

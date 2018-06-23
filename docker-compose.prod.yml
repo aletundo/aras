@@ -4,6 +4,9 @@ services:
   analyses-executor-service:
     depends_on: 
       - shared-mongodb
+      - kafka
+      - config-server
+      - eureka-server
     networks:
       - shared-mongodb-net
       - backend-net
@@ -15,6 +18,9 @@ services:
   analyses-configurator-service:
     depends_on: 
       - shared-mongodb
+      - kafka
+      - config-server
+      - eureka-server
     networks:
       - shared-mongodb-net
       - backend-net
@@ -24,6 +30,9 @@ services:
   projects-service:
     depends_on: 
       - shared-mongodb
+      - kafka
+      - config-server
+      - eureka-server
     networks:
       - shared-mongodb-net
       - backend-net
@@ -35,6 +44,9 @@ services:
   reports-service:
     depends_on: 
       - shared-mongodb
+      - kafka
+      - config-server
+      - eureka-server
     networks:
       - shared-mongodb-net
       - backend-net
@@ -48,6 +60,9 @@ services:
       NOTIFICATIONS_TO_ADDRESS_DEV: ${NOTIFICATIONS_TO_ADDRESS_DEV}
     depends_on: 
       - shared-mongodb
+      - kafka
+      - config-server
+      - eureka-server
     networks:
       - shared-mongodb-net
       - backend-net
@@ -57,6 +72,9 @@ services:
   gateway:
     environment:
       GATEWAY_PORT: ${GATEWAY_PORT}
+    depends_on:
+      - config-server
+      - eureka-server
     ports:
       - "${GATEWAY_PORT}:${GATEWAY_PORT}"
     networks:
@@ -64,7 +82,12 @@ services:
     deploy:
       restart_policy:
         condition: on-failure
+      placement:
+        constraints:
+          - node.role == manager
   eureka-server:
+    depends_on:
+      - config-server
     networks:
       - backend-net
     deploy:
