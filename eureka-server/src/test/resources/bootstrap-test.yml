@@ -1,0 +1,17 @@
+spring:
+  output:
+    ansi:
+      enabled: DETECT
+  application:
+    name: eureka-server
+  cloud:
+    config:
+      discovery:
+        enabled: false
+      enabled: false
+eureka:
+  instance:
+    hostname: eureka-server
+  client:
+    register-with-eureka: false
+    fetch-registry: false
