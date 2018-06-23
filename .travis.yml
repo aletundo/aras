@@ -17,6 +17,9 @@ env:
   - DIR=analyses-executor-service
   - DIR=notifications-service
   - DIR=analyses-configurator-service
+  - DIR=gateway
+  - DIR=config-server
+  - DIR=eureka-server
 before_install:
   - cd $DIR
 install:
