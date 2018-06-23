@@ -9,7 +9,6 @@ addons:
 services:
   - docker
 jdk:
-  - oraclejdk8
   - openjdk8
 env:
   - DIR=projects-service
