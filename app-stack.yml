@@ -8,11 +8,6 @@ services:
       SPRING_PROFILE: ${SPRING_PROFILE}
       SHARED_MONGODB_URI: ${SHARED_MONGODB_URI}
       DEBUG: ${DEBUG}
-    depends_on: 
-      - shared-mongodb
-      - kafka
-      - config-server
-      - eureka-server
     networks:
       - shared-mongodb-net
       - backend-net
@@ -28,11 +23,6 @@ services:
       SPRING_PROFILE: ${SPRING_PROFILE}
       SHARED_MONGODB_URI: ${SHARED_MONGODB_URI}
       DEBUG: ${DEBUG}
-    depends_on: 
-      - shared-mongodb
-      - kafka
-      - config-server
-      - eureka-server
     networks:
       - shared-mongodb-net
       - backend-net
@@ -46,11 +36,6 @@ services:
       SPRING_PROFILE: ${SPRING_PROFILE}
       SHARED_MONGODB_URI: ${SHARED_MONGODB_URI}
       DEBUG: ${DEBUG}
-    depends_on: 
-      - shared-mongodb
-      - kafka
-      - config-server
-      - eureka-server
     networks:
       - shared-mongodb-net
       - backend-net
@@ -66,11 +51,6 @@ services:
       SPRING_PROFILE: ${SPRING_PROFILE}
       SHARED_MONGODB_URI: ${SHARED_MONGODB_URI}
       DEBUG: ${DEBUG}
-    depends_on: 
-      - shared-mongodb
-      - kafka
-      - config-server
-      - eureka-server
     networks:
       - shared-mongodb-net
       - backend-net
@@ -93,11 +73,6 @@ services:
       SMTP_STARTTLS: ${SMTP_STARTTLS}
       DEBUG: ${DEBUG}
       NOTIFICATIONS_TO_ADDRESS_DEV: ${NOTIFICATIONS_TO_ADDRESS_DEV}
-    depends_on: 
-      - shared-mongodb
-      - kafka
-      - config-server
-      - eureka-server
     networks:
       - shared-mongodb-net
       - backend-net
@@ -111,9 +86,6 @@ services:
       SPRING_PROFILE: ${SPRING_PROFILE}
       DEBUG: ${DEBUG}
       GATEWAY_PORT: ${GATEWAY_PORT}
-    depends_on:
-      - config-server
-      - eureka-server
     ports:
       - "${GATEWAY_PORT}:${GATEWAY_PORT}"
     networks:
@@ -127,5 +99,10 @@ services:
 networks:
   backend-net:
     external:
+      name: backend-net
   shared-mongodb-net:
-    exeternal:
+    exeternal: backend-net
+volumes:
+  analyses-executor-service-data:
+  projects-service-data:
+  reports-service-data:

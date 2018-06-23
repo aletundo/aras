@@ -54,6 +54,3 @@ networks:
 volumes:
   shared-mongodb-db:
   shared-mongodb-configdb:
-  analyses-executor-service-data:
-  projects-service-data:
-  reports-service-data:
