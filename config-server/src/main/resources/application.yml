@@ -6,7 +6,7 @@ spring:
       name: config-server
       server:
         native:
-           search-locations: file:/srv/config-server/shared
+           search-locations: file:/srv/config-server/shared,classpath:/shared
   profiles:
      active: native
 server:
