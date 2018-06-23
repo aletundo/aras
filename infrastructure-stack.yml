@@ -1,0 +1,55 @@
+version: '3.4'
+
+services:
+  eureka-server:
+    image: discoaras/eureka-server
+    environment:
+      EUREKA_SERVER_PORT: ${EUREKA_SERVER_PORT}
+      CONFIG_SERVER_PORT: ${CONFIG_SERVER_PORT}
+      DEBUG: ${DEBUG}
+    depends_on:
+      - config-server
+    networks:
+      - backend-net
+  config-server:
+    image: discoaras/config-server
+    environment:
+      CONFIG_SERVER_PORT: ${CONFIG_SERVER_PORT}
+      EUREKA_SERVER_PORT: ${EUREKA_SERVER_PORT}
+      DEBUG: ${DEBUG}
+    networks:
+      - backend-net
+  zookeeper:
+    image: wurstmeister/zookeeper
+    networks:
+      - backend-net
+  kafka:
+    image: wurstmeister/kafka:1.1.0
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: ${KAFKA_ADVERTISED_HOST_NAME}
+      KAFKA_ADVERTISED_PORT: ${KAFKA_ADVERTISED_PORT}
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:${ZOOKEEPER_PORT}
+      KAFKA_CREATE_TOPICS: ${KAFKA_TOPICS}
+    depends_on:
+      - zookeeper
+    networks:
+      - backend-net
+  shared-mongodb:
+    image: mongo:3.7
+    networks:
+      - shared-mongodb-net
+    volumes:
+      - shared-mongodb-configdb:/data/configdb
+      - shared-mongodb-db:/data/db
+    deploy:
+      restart_policy:
+        condition: on-failure
+networks:
+  backend-net:
+  shared-mongodb-net:
+volumes:
+  shared-mongodb-db:
+  shared-mongodb-configdb:
+  analyses-executor-service-data:
+  projects-service-data:
+  reports-service-data:

@@ -2,6 +2,12 @@ version: '3.4'
 
 services:
   analyses-executor-service:
+    image: discoaras/analyses-executor-service
+    environment:
+      EUREKA_SERVER_PORT: ${EUREKA_SERVER_PORT}
+      SPRING_PROFILE: ${SPRING_PROFILE}
+      SHARED_MONGODB_URI: ${SHARED_MONGODB_URI}
+      DEBUG: ${DEBUG}
     depends_on: 
       - shared-mongodb
       - kafka
@@ -16,6 +22,12 @@ services:
       restart_policy:
         condition: on-failure
   analyses-configurator-service:
+    image: discoaras/analyses-configurator-service
+    environment:
+      EUREKA_SERVER_PORT: ${EUREKA_SERVER_PORT}
+      SPRING_PROFILE: ${SPRING_PROFILE}
+      SHARED_MONGODB_URI: ${SHARED_MONGODB_URI}
+      DEBUG: ${DEBUG}
     depends_on: 
       - shared-mongodb
       - kafka
@@ -28,6 +40,12 @@ services:
       restart_policy:
         condition: on-failure
   projects-service:
+    image: discoaras/projects-service
+    environment:
+      EUREKA_SERVER_PORT: ${EUREKA_SERVER_PORT}
+      SPRING_PROFILE: ${SPRING_PROFILE}
+      SHARED_MONGODB_URI: ${SHARED_MONGODB_URI}
+      DEBUG: ${DEBUG}
     depends_on: 
       - shared-mongodb
       - kafka
@@ -42,6 +60,12 @@ services:
       restart_policy:
         condition: on-failure
   reports-service:
+    image: discoaras/reports-service
+    environment:
+      EUREKA_SERVER_PORT: ${EUREKA_SERVER_PORT}
+      SPRING_PROFILE: ${SPRING_PROFILE}
+      SHARED_MONGODB_URI: ${SHARED_MONGODB_URI}
+      DEBUG: ${DEBUG}
     depends_on: 
       - shared-mongodb
       - kafka
@@ -56,7 +80,18 @@ services:
       restart_policy:
         condition: on-failure
   notifications-service:
+    image: discoaras/notifications-service
     environment:
+      EUREKA_SERVER_PORT: ${EUREKA_SERVER_PORT}
+      SPRING_PROFILE: ${SPRING_PROFILE}
+      SHARED_MONGODB_URI: ${SHARED_MONGODB_URI}
+      SMTP_HOST: ${SMTP_HOST}
+      SMTP_PORT: ${SMTP_PORT}
+      SMTP_USER: ${SMTP_USER}
+      SMTP_PASSWORD: ${SMTP_PASSWORD}
+      SMTP_AUTH: ${SMTP_AUTH}
+      SMTP_STARTTLS: ${SMTP_STARTTLS}
+      DEBUG: ${DEBUG}
       NOTIFICATIONS_TO_ADDRESS_DEV: ${NOTIFICATIONS_TO_ADDRESS_DEV}
     depends_on: 
       - shared-mongodb
@@ -70,7 +105,11 @@ services:
       restart_policy:
         condition: on-failure
   gateway:
+    image: discoaras/gateway
     environment:
+      EUREKA_SERVER_PORT: ${EUREKA_SERVER_PORT}
+      SPRING_PROFILE: ${SPRING_PROFILE}
+      DEBUG: ${DEBUG}
       GATEWAY_PORT: ${GATEWAY_PORT}
     depends_on:
       - config-server
@@ -85,49 +124,8 @@ services:
       placement:
         constraints:
           - node.role == manager
-  eureka-server:
-    depends_on:
-      - config-server
-    networks:
-      - backend-net
-    deploy:
-      restart_policy:
-        condition: on-failure
-  config-server:
-    networks:
-      - backend-net
-    deploy:
-      restart_policy:
-        condition: on-failure
-  zookeeper:
-    networks:
-      - backend-net
-    deploy:
-      restart_policy:
-        condition: on-failure
-  kafka:
-    networks:
-      - backend-net
-    deploy:
-      replicas: 3
-      restart_policy:
-        condition: on-failure
-  shared-mongodb:
-    image: mongo:3.7
-    networks:
-      - shared-mongodb-net
-    volumes:
-      - shared-mongodb-configdb:/data/configdb
-      - shared-mongodb-db:/data/db
-    deploy:
-      restart_policy:
-        condition: on-failure
 networks:
   backend-net:
+    external:
   shared-mongodb-net:
-volumes:
-  shared-mongodb-db:
-  shared-mongodb-configdb:
-  analyses-executor-service-data:
-  projects-service-data:
-  reports-service-data:
+    exeternal:
