@@ -7,3 +7,6 @@ services:
       EUREKA_SERVER_PORT: ${EUREKA_SERVER_PORT}
       CONFIG_SERVER_PORT: ${CONFIG_SERVER_PORT}
       DEBUG: ${DEBUG}
+    deploy:
+      restart_policy:
+        condition: on-failure

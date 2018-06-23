@@ -7,8 +7,14 @@ services:
       CONFIG_SERVER_PORT: ${CONFIG_SERVER_PORT}
       EUREKA_SERVER_PORT: ${EUREKA_SERVER_PORT}
       DEBUG: ${DEBUG}
+    deploy:
+      restart_policy:
+        condition: on-failure
   zookeeper:
     image: wurstmeister/zookeeper
+    deploy:
+      restart_policy:
+        condition: on-failure
   kafka:
     image: wurstmeister/kafka:1.1.0
     environment:
@@ -19,10 +25,6 @@ services:
     deploy:
       restart_policy:
         condition: on-failure
-      mode: global
-      placement:
-        constraints:
-          - node.role == worker
   shared-mongodb:
     image: mongo:3.7
     volumes:
