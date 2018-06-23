@@ -1,0 +1,108 @@
+version: '3.4'
+
+services:
+  analyses-executor-service:
+    depends_on: 
+      - shared-mongodb
+    networks:
+      - shared-mongodb-net
+      - backend-net
+    volumes:
+      - analyses-executor-service-data:/data
+    deploy:
+      restart_policy:
+        condition: on-failure
+  analyses-configurator-service:
+    depends_on: 
+      - shared-mongodb
+    networks:
+      - shared-mongodb-net
+      - backend-net
+    deploy:
+      restart_policy:
+        condition: on-failure
+  projects-service:
+    depends_on: 
+      - shared-mongodb
+    networks:
+      - shared-mongodb-net
+      - backend-net
+    volumes:
+      - projects-service-data:/data
+    deploy:
+      restart_policy:
+        condition: on-failure
+  reports-service:
+    depends_on: 
+      - shared-mongodb
+    networks:
+      - shared-mongodb-net
+      - backend-net
+    volumes:
+      - reports-service-data:/data
+    deploy:
+      restart_policy:
+        condition: on-failure
+  notifications-service:
+    environment:
+      NOTIFICATIONS_TO_ADDRESS_DEV: ${NOTIFICATIONS_TO_ADDRESS_DEV}
+    depends_on: 
+      - shared-mongodb
+    networks:
+      - shared-mongodb-net
+      - backend-net
+    deploy:
+      restart_policy:
+        condition: on-failure
+  gateway:
+    networks:
+      - backend-net
+    deploy:
+      restart_policy:
+        condition: on-failure
+  eureka-server:
+    networks:
+      - backend-net
+    deploy:
+      restart_policy:
+        condition: on-failure
+  config-server:
+    networks:
+      - backend-net
+    deploy:
+      restart_policy:
+        condition: on-failure
+  zookeeper:
+    networks:
+      - backend-net
+    deploy:
+      restart_policy:
+        condition: on-failure
+  kafka:
+    networks:
+      - backend-net
+    deploy:
+      replicas: 3
+      restart_policy:
+        condition: on-failure
+  shared-mongodb:
+    image: mongo:3.7
+    networks:
+      - shared-mongodb-net
+    volumes:
+      - shared-mongodb-configdb:/data/configdb
+      - shared-mongodb-db:/data/db
+    deploy:
+      restart_policy:
+        condition: on-failure
+networks:
+  backend-net:
+    driver: bridge
+  shared-mongodb-net:
+    driver: bridge
+volumes:
+  shared-mongodb-db:
+  shared-mongodb-configdb:
+  analyses-executor-service-data:
+  projects-service-data:
+  reports-service-data:

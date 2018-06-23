@@ -2,6 +2,8 @@ version: '3.4'
 
 services:
   analyses-executor-service:
+    build:
+      context: analyses-executor-service/
     environment:
       ANALYSES_EXECUTOR_SERVICE_PORT: ${ANALYSES_EXECUTOR_SERVICE_PORT}
     ports:
@@ -16,6 +18,8 @@ services:
         source: ./analyses-executor-service/data
         target: /data
   analyses-configurator-service:
+    build:
+      context: analyses-configurator-service/
     environment:
       ANALYSES_CONFIGURATOR_SERVICE_PORT: ${ANALYSES_CONFIGURATOR_SERVICE_PORT}
     ports:
@@ -26,6 +30,8 @@ services:
       - shared-mongodb-net
       - backend-net
   projects-service:
+    build:
+      context: projects-service/
     environment:
       PROJECTS_SERVICE_PORT: ${PROJECTS_SERVICE_PORT}
     ports:
@@ -40,6 +46,8 @@ services:
         source: ./projects-service/data
         target: /data
   reports-service:
+    build:
+      context: reports-service/
     environment:
       REPORTS_SERVICE_PORT: ${REPORTS_SERVICE_PORT}
     ports:
@@ -50,15 +58,11 @@ services:
       - shared-mongodb-net
       - backend-net
   notifications-service:
+    build:
+      context: notifications-service/
     environment:
       NOTIFICATIONS_SERVICE_PORT: ${NOTIFICATIONS_SERVICE_PORT}
       NOTIFICATIONS_TO_ADDRESS_DEV: ${NOTIFICATIONS_TO_ADDRESS_DEV}
-      SMTP_HOST: ${SMTP_HOST}
-      SMTP_PORT: ${SMTP_PORT}
-      SMTP_USER: ${SMTP_USER}
-      SMTP_PASSWORD: ${SMTP_PASSWORD}
-      SMTP_AUTH: ${SMTP_AUTH}
-      SMTP_STARTTLS: ${SMTP_STARTTLS}
     ports:
       - "${NOTIFICATIONS_SERVICE_PORT}:${NOTIFICATIONS_SERVICE_PORT}"
     depends_on: 
@@ -67,6 +71,8 @@ services:
       - shared-mongodb-net
       - backend-net
   gateway:
+    build:
+      context: gateway/
     environment:
       GATEWAY_PORT: ${GATEWAY_PORT}
     ports:
@@ -74,11 +80,15 @@ services:
     networks:
       - backend-net
   eureka-server:
+    build:
+      context: eureka-server/
     ports:
       - "${EUREKA_SERVER_PORT}:${EUREKA_SERVER_PORT}"
     networks:
       - backend-net
   config-server:
+    build:
+      context: config-server/
     networks:
       - backend-net
     volumes:
