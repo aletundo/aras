@@ -55,6 +55,10 @@ services:
       restart_policy:
         condition: on-failure
   gateway:
+    environment:
+      GATEWAY_PORT: ${GATEWAY_PORT}
+    ports:
+      - "${GATEWAY_PORT}:${GATEWAY_PORT}"
     networks:
       - backend-net
     deploy:
@@ -97,9 +101,7 @@ services:
         condition: on-failure
 networks:
   backend-net:
-    driver: bridge
   shared-mongodb-net:
-    driver: bridge
 volumes:
   shared-mongodb-db:
   shared-mongodb-configdb:
