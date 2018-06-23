@@ -8,9 +8,6 @@ services:
       SPRING_PROFILE: ${SPRING_PROFILE}
       SHARED_MONGODB_URI: ${SHARED_MONGODB_URI}
       DEBUG: ${DEBUG}
-    networks:
-      - shared-mongodb-net
-      - backend-net
     volumes:
       - analyses-executor-service-data:/data
     deploy:
@@ -23,9 +20,6 @@ services:
       SPRING_PROFILE: ${SPRING_PROFILE}
       SHARED_MONGODB_URI: ${SHARED_MONGODB_URI}
       DEBUG: ${DEBUG}
-    networks:
-      - shared-mongodb-net
-      - backend-net
     deploy:
       restart_policy:
         condition: on-failure
@@ -36,9 +30,6 @@ services:
       SPRING_PROFILE: ${SPRING_PROFILE}
       SHARED_MONGODB_URI: ${SHARED_MONGODB_URI}
       DEBUG: ${DEBUG}
-    networks:
-      - shared-mongodb-net
-      - backend-net
     volumes:
       - projects-service-data:/data
     deploy:
@@ -51,9 +42,6 @@ services:
       SPRING_PROFILE: ${SPRING_PROFILE}
       SHARED_MONGODB_URI: ${SHARED_MONGODB_URI}
       DEBUG: ${DEBUG}
-    networks:
-      - shared-mongodb-net
-      - backend-net
     volumes:
       - reports-service-data:/data
     deploy:
@@ -73,9 +61,6 @@ services:
       SMTP_STARTTLS: ${SMTP_STARTTLS}
       DEBUG: ${DEBUG}
       NOTIFICATIONS_TO_ADDRESS_DEV: ${NOTIFICATIONS_TO_ADDRESS_DEV}
-    networks:
-      - shared-mongodb-net
-      - backend-net
     deploy:
       restart_policy:
         condition: on-failure
@@ -88,20 +73,12 @@ services:
       GATEWAY_PORT: ${GATEWAY_PORT}
     ports:
       - "${GATEWAY_PORT}:${GATEWAY_PORT}"
-    networks:
-      - backend-net
     deploy:
       restart_policy:
         condition: on-failure
       placement:
         constraints:
           - node.role == manager
-networks:
-  backend-net:
-    external:
-      name: backend-net
-  shared-mongodb-net:
-    external: backend-net
 volumes:
   analyses-executor-service-data:
   projects-service-data:
