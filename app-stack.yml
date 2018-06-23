@@ -101,7 +101,7 @@ networks:
     external:
       name: backend-net
   shared-mongodb-net:
-    exeternal: backend-net
+    external: backend-net
 volumes:
   analyses-executor-service-data:
   projects-service-data:
