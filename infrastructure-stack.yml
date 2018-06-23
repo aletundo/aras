@@ -34,6 +34,10 @@ services:
       - zookeeper
     networks:
       - backend-net
+    deploy:
+      restart_policy:
+        condition: on-failure
+      replicas: 3
   shared-mongodb:
     image: mongo:3.7
     networks:
