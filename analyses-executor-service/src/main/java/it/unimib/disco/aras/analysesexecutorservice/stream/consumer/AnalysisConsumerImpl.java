@@ -5,7 +5,6 @@ import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
 
-import it.unimib.disco.aras.analysesexecutorservice.service.AnalysisJobService;
 import it.unimib.disco.aras.analysesexecutorservice.service.AnalysisResultsService;
 import it.unimib.disco.aras.analysesexecutorservice.stream.AnalysesStream;
 import it.unimib.disco.aras.analysesexecutorservice.stream.message.AnalysisMessage;
@@ -16,9 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 public class AnalysisConsumerImpl implements Consumer<AnalysisMessage> {
 	
 	@Autowired
-	private AnalysisJobService analysisJobService;
-	
-	@Autowired
 	private AnalysisResultsService analysisResultsService;
 	
 	@StreamListener(AnalysesStream.ANALYSES_INPUT)
@@ -26,7 +22,6 @@ public class AnalysisConsumerImpl implements Consumer<AnalysisMessage> {
 		log.debug("Analysis message about analysis " + analysis.getId() + " consumed!");
 		switch(analysis.getStatus()){
 		case CREATED:
-			analysisJobService.createJob(analysis.getId());
 			break;
 		case COMPLETED:
 			analysisResultsService.createResults(analysis.getId());
@@ -38,6 +33,8 @@ public class AnalysisConsumerImpl implements Consumer<AnalysisMessage> {
 		case RUNNING:
 			break;
 		case SCHEDULED:
+			break;
+		case DELETED:
 			break;
 		default:
 			break;
