@@ -1,0 +1,64 @@
+spring:
+  application:
+    name: testsuite
+  profiles:
+    active: ${TESTSUITE_SPRING_PROFILE}
+  output:
+    ansi:
+      enabled: DETECT
+  cloud:
+    config:
+      discovery:
+        enabled: false
+      enabled: false
+    stream:
+      kafka:
+        binder:
+          brokers: kafka
+          zkNodes: kafka
+      bindings:
+        analyses-in:
+          group: testsuiteGroup
+          destination: analyses
+          contentType: application/json
+          consumer:
+            headerMode: headers
+        results-in:
+          group: testsuiteGroup
+          destination: analysis-results
+          contentType: application/json
+          consumer:
+            headerMode: headers
+        configurations-in:
+          group: testsuiteGroup
+          destination: configurations
+          contentType: application/json
+          consumer:
+            headerMode: headers
+        notifications-in:
+          group: testsuiteGroup
+          destination: notifications
+          contentType: application/json
+          consumer:
+            headerMode: headers
+        reports-in:
+          group: testsuiteGroup
+          destination: reports
+          contentType: application/json
+          consumer:
+            headerMode: headers         
+eureka:
+  client:
+    register-with-eureka: false
+    region: default
+    serviceUrl:
+      defaultZone: http://eureka-server:${EUREKA_SERVER_PORT}/eureka/
+    registryFetchIntervalSeconds: 5
+application:
+  clients:
+    projects-service: http://projects-service:10003
+    analyses-configurator-service: http://analyses-configurator-service:10000
+    analyses-executor-service: http://analyses-executor-service:10001
+server:
+  port: ${TESTSUITE_PORT}
+debug: ${DEBUG}

@@ -1,0 +1,21 @@
+version: '3.4'
+
+services:
+  testsuite:
+    build:
+      context: testsuite/
+    image: discoaras/testsuite
+    environment:
+      EUREKA_SERVER_PORT: ${EUREKA_SERVER_PORT}
+      TESTSUITE_PORT: ${TESTSUITE_PORT}
+      SPRING_PROFILE: ${TESTSUITE_SPRING_PROFILE}
+      DEBUG: ${DEBUG}
+    networks:
+      - backend-net
+    stdin_open: true
+    tty: true
+networks:
+  backend-net:
+    external:
+      name: ${COMPOSE_PROJECT_NAME}_backend-net
+  
