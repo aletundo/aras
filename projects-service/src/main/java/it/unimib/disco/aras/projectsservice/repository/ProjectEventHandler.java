@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.core.annotation.HandleBeforeCreate;
 import org.springframework.data.rest.core.annotation.HandleBeforeSave;
 import org.springframework.data.rest.core.annotation.RepositoryEventHandler;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Service;
 
 import it.unimib.disco.aras.projectsservice.entity.Project;
@@ -24,6 +25,10 @@ public class ProjectEventHandler {
 
 	@HandleBeforeCreate
 	public void handleCreatingProject(Project project) {
+		if (checkInputString(project.getName()) || checkInputString(project.getDescription())) {
+			throw new HttpMessageNotReadableException("Validation failed");
+		}
+		
 		final Date now = Date.from(Instant.now());
 		project.setCreatedAt(now);
 		project.setUpdatedAt(now);
@@ -47,36 +52,6 @@ public class ProjectEventHandler {
 		
 		project.setVersions(versions);
 		project.setUpdatedAt(now);
-		
-		
-//		Project currentProject = projectRepository.findById(project.getId()).get();
-//
-//		List<Version> updatedOrAdded = new ArrayList<>();
-//
-//		if (null == currentProject.getVersions()) {
-//			updatedOrAdded = project.getVersions();
-//		} else {
-//			updatedOrAdded = new ArrayList<>(
-//					CollectionUtils.disjunction(project.getVersions(), currentProject.getVersions()));
-//		}
-//
-//		if (!updatedOrAdded.isEmpty()) {
-//			
-//			updatedOrAdded = updatedOrAdded.parallelStream().map(v -> {
-//				if (null == v.getId()) {
-//					v.setId(new ObjectId().toString());
-//					v.setCreatedAt(now);
-//					v.setUpdatedAt(now);
-//				} else if (!currentProject.getVersions().contains(v)) {
-//					v.setUpdatedAt(now);
-//				}
-//				return v;
-//			}).collect(Collectors.toList());
-//			
-//			updatedOrAdded.addAll(CollectionUtils.subtract(project.getVersions(), updatedOrAdded));
-//		}
-//		
-//		project.setVersions(updatedOrAdded);
 	}
 	
 	private boolean isDirty(List<Version> currentVersions, Version v) {
@@ -87,5 +62,9 @@ public class ProjectEventHandler {
 			}
 		}
 		return isDirty || !currentVersions.contains(v);
+	}
+	
+	private boolean checkInputString(String input) {
+		return (input == null || input.trim().length() == 0);
 	}
 }
