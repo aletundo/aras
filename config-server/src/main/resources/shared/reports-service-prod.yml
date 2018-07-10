@@ -10,7 +10,7 @@ spring:
       bindings:
         results-in:
           group: reportsGroup
-          destination: analysis-reports
+          destination: analysis-results
           contentType: application/json
           consumer:
             headerMode: headers
