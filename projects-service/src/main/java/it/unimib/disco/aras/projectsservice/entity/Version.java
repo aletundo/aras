@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 public class Version {
 	@Id
 	private String id;
+	private String name;
 	private String description;
 	private Date createdAt;
 	private Date updatedAt;

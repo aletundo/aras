@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import it.unimib.disco.aras.projectsservice.entity.Project;
 import it.unimib.disco.aras.projectsservice.service.ArtefactStorageService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,10 +32,10 @@ public class ProjectController{
 	@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<?> uploadVersionArtefacts(@PathVariable("projectId") String projectId,
 			@PathVariable("versionId") String versionId, @RequestParam("artefact") MultipartFile artefact) {
-		if (!artefact.isEmpty()) {
+		if (!artefact.isEmpty() && "application/zip".equals(artefact.getContentType())) {
 			try {
-				artefactStorageService.store(projectId, versionId, artefact);
-				return ResponseEntity.ok(null);
+				Project savedProject = artefactStorageService.store(projectId, versionId, artefact);
+				return ResponseEntity.ok(savedProject);
 			} catch (IOException e) {
 				log.error(e.getMessage());
 				return ResponseEntity.badRequest().build();

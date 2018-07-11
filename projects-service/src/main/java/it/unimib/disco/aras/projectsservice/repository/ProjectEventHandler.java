@@ -41,6 +41,9 @@ public class ProjectEventHandler {
 		
 		List<Version> versions = project.getVersions().stream().map(v -> {
 			if(null == v.getId()) {
+				if(!isValidVersion(v)) {
+					throw new HttpMessageNotReadableException("Validation failed");
+				}
 				v.setId(new ObjectId().toString());
 				v.setCreatedAt(now);
 				v.setUpdatedAt(now);
@@ -66,5 +69,9 @@ public class ProjectEventHandler {
 	
 	private boolean checkInputString(String input) {
 		return (input == null || input.trim().length() == 0);
+	}
+	
+	private boolean isValidVersion(Version version) {
+		return !checkInputString(version.getName()) && !checkInputString(version.getDescription());
 	}
 }

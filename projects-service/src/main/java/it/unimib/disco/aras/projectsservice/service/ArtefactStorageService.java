@@ -32,7 +32,7 @@ public class ArtefactStorageService {
 	@Autowired
 	private ApplicationEventPublisher publisher;
 
-	public void store(String projectId, String versionId, MultipartFile artefact) throws IOException {
+	public Project store(String projectId, String versionId, MultipartFile artefact) throws IOException {
 		File versionArtefactsPath = new File(UPLOADS_DIR + projectId + "/" + versionId + "/");
 
 		if (!versionArtefactsPath.exists()) {
@@ -58,8 +58,9 @@ public class ArtefactStorageService {
 		});
 		
 		publisher.publishEvent(new BeforeSaveEvent(project));
-		projectRepository.save(project);
+		Project savedProject = projectRepository.save(project);
 		publisher.publishEvent(new AfterSaveEvent(project));
+		return savedProject;
 	}
 
 	public Resource load(String projectId, String versionId) throws MalformedURLException {
