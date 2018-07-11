@@ -19,10 +19,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import it.unimib.disco.aras.testsuite.stream.consumer.Consumer;
 import it.unimib.disco.aras.testsuite.stream.message.AnalysisConfigurationMessage;
 import it.unimib.disco.aras.testsuite.web.rest.client.AnalysesConfiguratorServiceClient;
-import lombok.extern.slf4j.Slf4j;
 
 @Service
-@Slf4j
 public class AnalysisConfigurationService {
 	
 	@Autowired
@@ -34,10 +32,10 @@ public class AnalysisConfigurationService {
 	@Autowired
 	private ObjectMapper objectMapper;
 	
-	public void createValidConfiguration() throws RestClientException, IOException, InterruptedException {
+	public void createValidConfiguration(String projectId, String versionId) throws RestClientException, IOException, InterruptedException {
 		ObjectNode jsonObject = objectMapper.getNodeFactory().objectNode()
-				.put("projectId", "5b25722975a5270001416617")
-				.put("versionId", "5b25722975a5270001416618");
+				.put("projectId", projectId)
+				.put("versionId", versionId);
 
 		ObjectNode parametersNode = objectMapper.getNodeFactory().objectNode().put("inputMode", "jarsFolderMode");
 		
@@ -56,7 +54,7 @@ public class AnalysisConfigurationService {
 		
 		analysisConfigurationConsumer.getLatch().await(1, TimeUnit.MINUTES);
 		assertThat(analysisConfigurationConsumer.getLatch().getCount()).isEqualTo(0);
-		assertThat(analysisConfigurationConsumer.getMessages().get(new Long(1)).getProjectId()).isEqualTo("5b25722975a5270001416617");
+		assertThat(analysisConfigurationConsumer.getMessages().get(new Long(1)).getProjectId()).isEqualTo(projectId);
 	}
 	
 	public void createInvalidConfiguration() throws RestClientException, IOException, InterruptedException {
