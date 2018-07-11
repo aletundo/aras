@@ -24,7 +24,7 @@ public class AnalysisConsumerImpl implements Consumer<AnalysisMessage> {
 	@Autowired
 	public AnalysisConsumerImpl() {
 		this.messages = new ConcurrentHashMap<>();
-		this.latch = new CountDownLatch(1);
+		this.latch = new CountDownLatch(4);
 	}
 	
 	@StreamListener(TestConfigurationStream.ANALYSES_INPUT)
