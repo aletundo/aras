@@ -31,4 +31,20 @@ public class AnalysesExecutorServiceClient {
 	  HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
 	  this.client = restTemplateBuilder.requestFactory(() -> requestFactory).build();
 	}
+
+	public ResponseEntity<String> createAnalysis(ObjectNode jsonObject) throws JsonProcessingException {
+		HttpHeaders headers = new HttpHeaders();
+	    headers.setContentType(MediaType.APPLICATION_JSON);
+	    HttpEntity<String> httpEntity = new HttpEntity<>(objectMapper.writeValueAsString(jsonObject), headers);
+	    ResponseEntity<String> response;
+	    
+	    try {
+			response = this.client.postForEntity(baseUrl + "/analyses",
+					httpEntity, String.class);
+	    } catch(HttpClientErrorException e) {
+	    	response = ResponseEntity.status(HttpStatus.BAD_REQUEST).headers(new HttpHeaders()).body("");
+	    }
+		
+		return response;
+	}
 }
