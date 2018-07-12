@@ -59,6 +59,7 @@ application:
     projects-service: http://projects-service:10003
     analyses-configurator-service: http://analyses-configurator-service:10000
     analyses-executor-service: http://analyses-executor-service:10001
+    notifications-service: http://notifications-service:10002
 server:
   port: ${TESTSUITE_PORT}
 debug: ${DEBUG}
