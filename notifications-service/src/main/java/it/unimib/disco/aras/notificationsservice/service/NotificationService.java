@@ -1,10 +1,14 @@
 package it.unimib.disco.aras.notificationsservice.service;
 
+import java.sql.Date;
+import java.time.Instant;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import it.unimib.disco.aras.notificationsservice.entity.NotificationType;
-import it.unimib.disco.aras.notificationsservice.repository.NotificationRepository;
+import it.unimib.disco.aras.notificationsservice.entity.StatusNotification;
+import it.unimib.disco.aras.notificationsservice.repository.StatusNotificationRepository;
 import it.unimib.disco.aras.notificationsservice.stream.message.AnalysisMessage;
 import it.unimib.disco.aras.notificationsservice.stream.message.NotificationMessage;
 import it.unimib.disco.aras.notificationsservice.stream.producer.Producer;
@@ -18,7 +22,7 @@ public class NotificationService {
 	private Producer<NotificationMessage> notificationProducer;
 
 	@Autowired
-	private NotificationRepository notificationRepository;
+	private StatusNotificationRepository notificationRepository;
 
 	@Autowired
 	private EmailService emailService;
@@ -27,11 +31,15 @@ public class NotificationService {
 		// TODO:
 		// - get subscribers
 		// - get subscribers' channels
-		// - store notification
 		// - run a dedicated job for each channel (eg. QuartzJob)
-		// - dispatch a NotificationMessage on Kafka
-		emailService.sendSimpleMessage(System.getenv("NOTIFICATIONS_TO_ADDRESS_DEV"), "[ARAS] Analysis status notification",
+		emailService.sendSimpleMessage(System.getenv("NOTIFICATIONS_TO_ADDRESS_DEV"),
+				"[ARAS] Analysis status notification",
 				"The analysis with id " + analysis.getId() + " is on status " + analysis.getStatus());
-		notificationProducer.dispatch(NotificationMessage.build("5b25497c75a527000141660d", NotificationType.STATUS));
+		StatusNotification notification = StatusNotification.builder().analysisStatus(analysis.getStatus())
+				.analysisId(analysis.getId()).createdAt(Date.from(Instant.now()))
+				.notificationType(NotificationType.STATUS).build();
+		notification = notificationRepository.save(notification);
+		notificationProducer
+				.dispatch(NotificationMessage.builder().id(notification.getId()).type(NotificationType.STATUS).build());
 	}
 }
