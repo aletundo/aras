@@ -54,7 +54,7 @@ public class AnalysisConfigurationService {
 		
 		analysisConfigurationConsumer.getLatch().await(1, TimeUnit.MINUTES);
 		assertThat(analysisConfigurationConsumer.getLatch().getCount()).isEqualTo(0);
-		assertThat(analysisConfigurationConsumer.getMessages().get(new Long(1)).getProjectId()).isEqualTo(projectId);
+		assertThat(analysisConfigurationConsumer.getMessages().get(0).getProjectId()).isEqualTo(projectId);
 	}
 	
 	public void createInvalidConfiguration() throws RestClientException, IOException, InterruptedException {

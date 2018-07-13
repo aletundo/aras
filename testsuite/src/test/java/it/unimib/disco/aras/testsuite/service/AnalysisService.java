@@ -8,7 +8,10 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +27,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import it.unimib.disco.aras.testsuite.stream.consumer.Consumer;
 import it.unimib.disco.aras.testsuite.stream.message.AnalysisMessage;
-import it.unimib.disco.aras.testsuite.stream.message.AnalysisStatus;
 import it.unimib.disco.aras.testsuite.web.rest.client.AnalysesExecutorServiceClient;
 import lombok.extern.slf4j.Slf4j;
 
@@ -74,13 +76,6 @@ public class AnalysisService {
 		assertThat(headers.getLocation()).isNotNull();
 		assertThat(body.at("/_links/self").isMissingNode()).isEqualTo(false);
 		assertThat(body.at("/_links/self").isNull()).isEqualTo(false);
-
-		analysisConsumer.getLatch().await(1, TimeUnit.MINUTES);
-		assertThat(analysisConsumer.getLatch().getCount()).isEqualTo(0);
-		assertThat(analysisConsumer.getMessages().get(new Long(4)).getStatus()).isEqualTo(AnalysisStatus.CREATED);
-		assertThat(analysisConsumer.getMessages().get(new Long(3)).getStatus()).isEqualTo(AnalysisStatus.SCHEDULED);
-		assertThat(analysisConsumer.getMessages().get(new Long(2)).getStatus()).isEqualTo(AnalysisStatus.RUNNING);
-		assertThat(analysisConsumer.getMessages().get(new Long(1)).getStatus()).isEqualTo(AnalysisStatus.COMPLETED);
 
 		return response;
 	}
@@ -138,13 +133,6 @@ public class AnalysisService {
 		assertThat(body.at("/_links/self").isMissingNode()).isEqualTo(false);
 		assertThat(body.at("/_links/self").isNull()).isEqualTo(false);
 
-		analysisConsumer.getLatch().await(2, TimeUnit.MINUTES);
-		assertThat(analysisConsumer.getLatch().getCount()).isEqualTo(0);
-		assertThat(analysisConsumer.getMessages().get(new Long(4)).getStatus()).isEqualTo(AnalysisStatus.CREATED);
-		assertThat(analysisConsumer.getMessages().get(new Long(3)).getStatus()).isEqualTo(AnalysisStatus.SCHEDULED);
-		assertThat(analysisConsumer.getMessages().get(new Long(2)).getStatus()).isEqualTo(AnalysisStatus.RUNNING);
-		assertThat(analysisConsumer.getMessages().get(new Long(1)).getStatus()).isEqualTo(AnalysisStatus.COMPLETED);
-
 		return response;
 	}
 
@@ -194,5 +182,39 @@ public class AnalysisService {
 		HttpStatus status = response.getStatusCode();
 
 		assertThat(status).isEqualTo(HttpStatus.BAD_REQUEST);
+	}
+	
+	public ResponseEntity<String> verifyAnalysisResultsCreated(String analysisId) throws IOException {
+		ResponseEntity<String> response = analysesExecutorServiceClient.getAnalysisResultsByAnalysisId(analysisId);
+		
+		JsonNode body = objectMapper.readTree(response.getBody());
+		HttpStatus status = response.getStatusCode();
+		
+		assertThat(status).isEqualTo(HttpStatus.OK);
+		assertThat(body.at("/id").isMissingNode()).isEqualTo(false);
+		assertThat(body.at("/id").isNull()).isEqualTo(false);
+		assertThat(body.at("/analysisId").textValue()).isEqualTo(analysisId);
+		assertThat(body.at("/resultsPath").textValue()).isEqualTo("/data/analyses/" + analysisId + "/results/results.zip");
+		
+		return response;
+	}
+	
+	public void verifyAnalysisResultsNotCreated(String analysisId) throws IOException {
+		ResponseEntity<String> response = analysesExecutorServiceClient.getAnalysisResultsByAnalysisId(analysisId);
+		HttpStatus status = response.getStatusCode();
+		
+		assertThat(status).isEqualTo(HttpStatus.NOT_FOUND);
+	}
+	
+	public void verifyAnalysesMessages(final long timeout, final Set<String> statusesToCheck) throws InterruptedException {
+		analysisConsumer.getLatch().await(timeout, TimeUnit.MINUTES);
+		assertThat(analysisConsumer.getLatch().getCount()).isEqualTo(0);
+		
+		List<String> receivedStatuses = new LinkedList<>();
+		for(AnalysisMessage m : analysisConsumer.getMessages()) {
+			receivedStatuses.add(m.getStatus().name());
+		}
+		
+		assertThat(receivedStatuses).containsExactlyInAnyOrderElementsOf(statusesToCheck);
 	}
 }

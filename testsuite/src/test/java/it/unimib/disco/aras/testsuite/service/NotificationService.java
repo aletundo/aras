@@ -43,7 +43,7 @@ public class NotificationService {
 				AnalysisStatus.RUNNING.name(), AnalysisStatus.COMPLETED.name());
 	}
 
-	public void verifyAnalysisCreatedStatusNofication(String analysisId) throws IOException {
+	public void verifyAnalysisCreatedStatusNotification(String analysisId) throws IOException {
 		Condition<String> created = new Condition<>(STATUSES::contains, AnalysisStatus.CREATED.name());
 		ResponseEntity<String> response = notificationsServiceClient.getStatusNotificationsByAnalysisId(analysisId);
 		JsonNode body = objectMapper.readTree(response.getBody());
@@ -55,7 +55,7 @@ public class NotificationService {
 		assertThat(receivedStatuses).areAtLeastOne(created);
 	}
 	
-	public void verifyAnalysisScheduledStatusNofication(String analysisId) throws IOException {
+	public void verifyAnalysisScheduledStatusNotification(String analysisId) throws IOException {
 		Condition<String> scheduled = new Condition<>(STATUSES::contains, AnalysisStatus.SCHEDULED.name());
 		ResponseEntity<String> response = notificationsServiceClient.getStatusNotificationsByAnalysisId(analysisId);
 		JsonNode body = objectMapper.readTree(response.getBody());
@@ -67,7 +67,7 @@ public class NotificationService {
 		assertThat(receivedStatuses).areAtLeastOne(scheduled);
 	}
 	
-	public void verifyAnalysisRunningStatusNofication(String analysisId) throws IOException {
+	public void verifyAnalysisRunningStatusNotification(String analysisId) throws IOException {
 		Condition<String> running = new Condition<>(STATUSES::contains, AnalysisStatus.RUNNING.name());
 		ResponseEntity<String> response = notificationsServiceClient.getStatusNotificationsByAnalysisId(analysisId);
 		JsonNode body = objectMapper.readTree(response.getBody());
@@ -79,7 +79,7 @@ public class NotificationService {
 		assertThat(receivedStatuses).areAtLeastOne(running);
 	}
 	
-	public void verifyAnalysisCompletedStatusNofication(String analysisId) throws IOException {
+	public void verifyAnalysisCompletedStatusNotification(String analysisId) throws IOException {
 		Condition<String> complted = new Condition<>(STATUSES::contains, AnalysisStatus.COMPLETED.name());
 		ResponseEntity<String> response = notificationsServiceClient.getStatusNotificationsByAnalysisId(analysisId);
 		JsonNode body = objectMapper.readTree(response.getBody());
@@ -91,7 +91,7 @@ public class NotificationService {
 		assertThat(receivedStatuses).areAtLeastOne(complted);
 	}
 	
-	public void verifyAnalysisFailedStatusNofication(String analysisId) throws IOException {
+	public void verifyAnalysisFailedStatusNotification(String analysisId) throws IOException {
 		Condition<String> failed = new Condition<>(STATUSES::contains, AnalysisStatus.FAILED.name());
 		ResponseEntity<String> response = notificationsServiceClient.getStatusNotificationsByAnalysisId(analysisId);
 		JsonNode body = objectMapper.readTree(response.getBody());

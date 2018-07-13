@@ -9,7 +9,6 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
@@ -17,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -50,8 +50,8 @@ public class ProjectsServiceClient {
 	    try {
 			response = this.client.postForEntity(baseUrl + "/projects",
 					httpEntity, String.class);
-	    } catch(HttpClientErrorException e) {
-	    	response = ResponseEntity.status(HttpStatus.BAD_REQUEST).headers(new HttpHeaders()).body("");
+	    } catch(HttpServerErrorException | HttpClientErrorException e) {
+	    	response = ResponseEntity.status(e.getStatusCode()).headers(e.getResponseHeaders()).body(e.getResponseBodyAsString());
 	    }
 		
 		return response;
@@ -66,8 +66,8 @@ public class ProjectsServiceClient {
 	    try {
 			response = this.client.exchange(baseUrl + "/projects/" + projectId, HttpMethod.PATCH,
 					httpEntity, String.class);
-	    } catch(HttpClientErrorException e) {
-	    	response = ResponseEntity.status(HttpStatus.BAD_REQUEST).headers(new HttpHeaders()).body("");
+	    } catch(HttpServerErrorException | HttpClientErrorException e) {
+	    	response = ResponseEntity.status(e.getStatusCode()).headers(e.getResponseHeaders()).body(e.getResponseBodyAsString());
 	    }
 		
 		return response;
@@ -91,9 +91,8 @@ public class ProjectsServiceClient {
 	    try {
 			response = this.client.postForEntity(baseUrl + "/projects/" + projectId + "/versions/" + versionId,
 					httpEntity, String.class);
-	    } catch(HttpClientErrorException e) {
-	    	log.info(e.getMessage());
-	    	response = ResponseEntity.status(HttpStatus.BAD_REQUEST).headers(new HttpHeaders()).body("");
+	    } catch(HttpServerErrorException | HttpClientErrorException e) {
+	    	response = ResponseEntity.status(e.getStatusCode()).headers(e.getResponseHeaders()).body(e.getResponseBodyAsString());
 	    }
 		
 		return response;

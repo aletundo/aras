@@ -1,7 +1,7 @@
 package it.unimib.disco.aras.testsuite.stream.consumer;
 
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,19 +17,18 @@ import lombok.Data;
 @Data
 public class AnalysisConsumerImpl implements Consumer<AnalysisMessage> {
 	
-	
-	private ConcurrentMap<Long, AnalysisMessage> messages;
+	private List<AnalysisMessage> messages;
 	private CountDownLatch latch;
 	
 	@Autowired
 	public AnalysisConsumerImpl() {
-		this.messages = new ConcurrentHashMap<>();
+		this.messages = new LinkedList<>();
 		this.latch = new CountDownLatch(4);
 	}
 	
 	@StreamListener(TestConfigurationStream.ANALYSES_INPUT)
 	public void consume(@Payload AnalysisMessage analysis) {
 		this.latch.countDown();
-		this.messages.put(this.latch.getCount() + 1, analysis);
+		this.messages.add(analysis);
 	}
 }
