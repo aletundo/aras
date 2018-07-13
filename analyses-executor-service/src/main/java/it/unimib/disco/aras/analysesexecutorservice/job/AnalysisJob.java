@@ -91,9 +91,13 @@ public class AnalysisJob extends QuartzJobBean {
 			Files.move(tempArtefactsZip, zipArtefacts);
 			
 			ZipFile zipFile = new ZipFile(zipArtefacts);
+			if(!zipFile.isValidZipFile()) {
+				throw new ZipException("Zip file is invalid");
+			}
 	        zipFile.extractAll(analysisDir.getAbsolutePath());
 	        zipArtefacts.delete();
-		} catch (IOException | ZipException e) {
+	        checkValidJarFolder();
+		} catch (IOException | ZipException | RuntimeException e) {
 			analysisProducer
 					.dispatch(AnalysisMessage.build(analysisId, projectId, versionId, AnalysisStatus.FAILED));
 			log.error("Analysis job for project with id: " + versionId + " failed due to {}", e.getMessage());
@@ -102,6 +106,14 @@ public class AnalysisJob extends QuartzJobBean {
 		}
 	}
 	
+	private void checkValidJarFolder() throws RuntimeException {
+		File[] files = analysisDir.listFiles();
+		
+		if(1 != files.length || 1 > files[0].listFiles().length) {
+			throw new RuntimeException("Invalid JARs folder");
+		}
+	}
+
 	private InterfaceModel configureArcan() {
 		InterfaceModel interfaceModel = new InterfaceModel();
 		interfaceModel.set_jarsFolderMode(true);
