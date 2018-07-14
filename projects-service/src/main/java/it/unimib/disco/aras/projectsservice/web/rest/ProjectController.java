@@ -18,21 +18,27 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import it.unimib.disco.aras.projectsservice.entity.Project;
+import it.unimib.disco.aras.projectsservice.repository.ProjectRepository;
 import it.unimib.disco.aras.projectsservice.service.ArtefactStorageService;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/projects/{projectId}/versions/{versionId}")
 @Slf4j
-public class ProjectController{
+public class ProjectController {
 
 	@Autowired
 	private ArtefactStorageService artefactStorageService;
 
+	@Autowired
+	private ProjectRepository projectRepository;
+
 	@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<?> uploadVersionArtefacts(@PathVariable("projectId") String projectId,
 			@PathVariable("versionId") String versionId, @RequestParam("artefact") MultipartFile artefact) {
-		if (!artefact.isEmpty() && "application/zip".equals(artefact.getContentType())) {
+
+		if (projectRepository.findByVersionId(versionId).isPresent() && !artefact.isEmpty()
+				&& "application/zip".equals(artefact.getContentType())) {
 			try {
 				Project savedProject = artefactStorageService.store(projectId, versionId, artefact);
 				return ResponseEntity.ok(savedProject);

@@ -56,7 +56,7 @@ public class ArtefactStorageService {
 				v.setArtefactsPath(filepath);
 			}
 		});
-		
+
 		publisher.publishEvent(new BeforeSaveEvent(project));
 		Project savedProject = projectRepository.save(project);
 		publisher.publishEvent(new AfterSaveEvent(project));
@@ -64,11 +64,12 @@ public class ArtefactStorageService {
 	}
 
 	public Resource load(String projectId, String versionId) throws MalformedURLException {
-		Project project = projectRepository.findByVersionId(versionId);
+		Project project = projectRepository.findByVersionId(versionId)
+				.orElseThrow(() -> new ResourceNotFoundException());
 
 		Path filepath = Paths.get(project.getVersion(versionId).getArtefactsPath()).toAbsolutePath().normalize();
 		Resource resource = new UrlResource(filepath.toUri());
-		
+
 		if (resource.exists()) {
 			return resource;
 		} else {
