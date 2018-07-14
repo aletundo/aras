@@ -1,14 +1,13 @@
 package it.unimib.disco.aras.notificationsservice.stream.message;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 
 @Data
-@AllArgsConstructor(staticName="build")
-@RequiredArgsConstructor
+@Builder
 public class ReportMessage {
 	private String id;
-	private String reportId;
+	private String analysisId;
+	private String downloadUriString;
 	private ReportStatus reportStatus;
 }

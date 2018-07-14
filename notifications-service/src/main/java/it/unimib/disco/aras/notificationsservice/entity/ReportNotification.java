@@ -20,12 +20,14 @@ public class ReportNotification extends Notification {
 	
 	private ReportStatus reportStatus;
 	private String reportId;
+	private String analysisId;
 
 	@Builder
 	private ReportNotification(String id, NotificationType notificationType, Date createdAt, ReportStatus reportStatus,
-			String reportId) {
+			String reportId, String analysisId) {
 		super(id, notificationType, createdAt);
 		this.reportStatus = reportStatus;
+		this.analysisId = analysisId;
 		this.reportId = reportId;
 	}
 }
