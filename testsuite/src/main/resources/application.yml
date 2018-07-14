@@ -56,10 +56,11 @@ eureka:
     registryFetchIntervalSeconds: 5
 application:
   clients:
-    projects-service: http://projects-service:10003
     analyses-configurator-service: http://analyses-configurator-service:10000
     analyses-executor-service: http://analyses-executor-service:10001
     notifications-service: http://notifications-service:10002
+    projects-service: http://projects-service:10003
+    reports-service: http://reports-service:10004
 server:
   port: ${TESTSUITE_PORT}
 debug: ${DEBUG}

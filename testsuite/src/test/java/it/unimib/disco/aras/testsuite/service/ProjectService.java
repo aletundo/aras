@@ -95,6 +95,13 @@ public class ProjectService {
 		assertThat(status).isEqualTo(HttpStatus.BAD_REQUEST);
 	}
 	
+	public void uploadValidArtefactsZipWithInvalidProjectVersion(String projectId) throws IOException {
+		File file = new ClassPathResource("validZip.zip").getFile();
+		ResponseEntity<String> response = projectsServiceServiceClient.uploadVersionArtefactsZip(projectId, "invalidProjectVersion", file, false);
+		HttpStatus status = response.getStatusCode();
+		assertThat(status).isEqualTo(HttpStatus.BAD_REQUEST);
+	}
+	
 	public ResponseEntity<String> uploadValidArtefactsZip(String projectId, String versionId) throws IOException {
 		File file = new ClassPathResource("validZip.zip").getFile();
 		ResponseEntity<String> response = projectsServiceServiceClient.uploadVersionArtefactsZip(projectId, versionId, file, false);

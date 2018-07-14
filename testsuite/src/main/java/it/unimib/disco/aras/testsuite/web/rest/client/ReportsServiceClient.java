@@ -12,23 +12,23 @@ import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
 @Service
-public class NotificationsServiceClient {
+public class ReportsServiceClient {
 	private final RestTemplate client;
 
-	@Value("${application.clients.notifications-service}")
+	@Value("${application.clients.reports-service}")
 	private String baseUrl;
 
-	public NotificationsServiceClient(RestTemplateBuilder restTemplateBuilder) {
+	public ReportsServiceClient(RestTemplateBuilder restTemplateBuilder) {
 		HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
 		this.client = restTemplateBuilder.requestFactory(() -> requestFactory).build();
 	}
 
-	public ResponseEntity<String> getStatusNotificationsByAnalysisId(String analysisId)
+	public ResponseEntity<String> getReportsByAnalysisId(String analysisId)
 			throws IOException {
 	    ResponseEntity<String> response;
 	    
 	    try {
-			response = this.client.getForEntity(baseUrl + "/status-notifications/search/findByAnalysisId?analysisId=" + analysisId, String.class);
+			response = this.client.getForEntity(baseUrl + "/reports/search/findByAnalysisId?analysisId=" + analysisId, String.class);
 	    } catch(HttpServerErrorException | HttpClientErrorException e) {
 	    	response = ResponseEntity.status(e.getStatusCode()).headers(e.getResponseHeaders()).body(e.getResponseBodyAsString());
 	    }
@@ -36,12 +36,12 @@ public class NotificationsServiceClient {
 		return response;
 	}
 	
-	public ResponseEntity<String> getReportNotificationsByAnalysisId(String analysisId)
+	public ResponseEntity<String> getReportsByReportId(String reportId)
 			throws IOException {
 	    ResponseEntity<String> response;
 	    
 	    try {
-			response = this.client.getForEntity(baseUrl + "/report-notifications/search/findByAnalysisId?analysisId=" + analysisId, String.class);
+			response = this.client.getForEntity(baseUrl + "/reports/" + reportId, String.class);
 	    } catch(HttpServerErrorException | HttpClientErrorException e) {
 	    	response = ResponseEntity.status(e.getStatusCode()).headers(e.getResponseHeaders()).body(e.getResponseBodyAsString());
 	    }

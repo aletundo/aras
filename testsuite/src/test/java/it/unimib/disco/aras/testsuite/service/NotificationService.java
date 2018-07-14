@@ -17,18 +17,13 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import it.unimib.disco.aras.testsuite.stream.consumer.Consumer;
 import it.unimib.disco.aras.testsuite.stream.message.AnalysisStatus;
-import it.unimib.disco.aras.testsuite.stream.message.NotificationMessage;
 import it.unimib.disco.aras.testsuite.web.rest.client.NotificationsServiceClient;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
 public class NotificationService {
-
-	@Autowired
-	private Consumer<NotificationMessage> analysisConsumer;
 
 	@Autowired
 	private ObjectMapper objectMapper;
@@ -101,6 +96,24 @@ public class NotificationService {
 		assertThat(status).isEqualTo(HttpStatus.OK);
 		assertThat(body.at("/_embedded/status-notifications").isArray()).isEqualTo(true);
 		assertThat(receivedStatuses).areAtLeastOne(failed);
+	}
+	
+	public void verifyReportGeneratedNotification(String analysisId) throws IOException {
+		ResponseEntity<String> response = notificationsServiceClient.getReportNotificationsByAnalysisId(analysisId);
+		JsonNode body = objectMapper.readTree(response.getBody());
+		HttpStatus status = response.getStatusCode();
+		assertThat(status).isEqualTo(HttpStatus.OK);
+		assertThat(body.at("/_embedded/report-notifications/0/reportStatus").textValue()).isEqualTo("GENERATED");
+		assertThat(body.at("/_embedded/report-notifications/0/analysisId").textValue()).isEqualTo(analysisId);
+	}
+	
+	public void verifyReportFailedNotification(String analysisId) throws IOException {
+		ResponseEntity<String> response = notificationsServiceClient.getReportNotificationsByAnalysisId(analysisId);
+		JsonNode body = objectMapper.readTree(response.getBody());
+		HttpStatus status = response.getStatusCode();
+		assertThat(status).isEqualTo(HttpStatus.OK);
+		assertThat(body.at("/_embedded/report-notifications/0/reportStatus").textValue()).isEqualTo("FAILED");
+		assertThat(body.at("/_embedded/report-notifications/0/analysisId").textValue()).isEqualTo(analysisId);
 	}
 	
 	private List<String> extractReceivedStatuses(final JsonNode body){
