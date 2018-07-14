@@ -1,7 +1,5 @@
 package it.unimib.disco.aras.analysesexecutorservice.repository;
 
-import java.net.URI;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.core.annotation.HandleAfterCreate;
 import org.springframework.data.rest.core.annotation.RepositoryEventHandler;
@@ -23,11 +21,11 @@ public class AnalysisResultsEventHandler {
 	@HandleAfterCreate
 	public void handleAnalysisResultsCreated(AnalysisResults analysisResults) {
 		log.debug("Analysis results with id: " + analysisResults.getId() + " saved!");
-		URI downloadUri = URI.create("/results/" + analysisResults.getId() + "/download");
+		String downloadUriString = String.format("/results/%s/download", analysisResults.getId());
 		AnalysisResultsMessage analysisResultsMessage = AnalysisResultsMessage.builder()
 				.analysisId(analysisResults.getAnalysisId())
 				.id(analysisResults.getId())
-				.downloadUri(downloadUri)
+				.downloadUriString(downloadUriString)
 				.build();
 		producer.dispatch(analysisResultsMessage);
 	}

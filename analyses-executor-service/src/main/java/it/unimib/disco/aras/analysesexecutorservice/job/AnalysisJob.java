@@ -38,13 +38,13 @@ import net.lingala.zip4j.exception.ZipException;
 public class AnalysisJob extends QuartzJobBean {
 
 	private static final String ANALYSES_DIR = "/data/analyses/";
-	
+
 	private String projectId;
-	
+
 	private String versionId;
-	
+
 	private File analysisDir;
-	
+
 	private String analysisId;
 
 	@Autowired
@@ -71,45 +71,47 @@ public class AnalysisJob extends QuartzJobBean {
 		analysisDir = new File(ANALYSES_DIR + analysis.getId());
 		analysisDir.mkdirs();
 
-		artefactsDownloadService.downloadArtefacts(projectId, versionId)
-		.subscribe(artefacts -> {
-			prepareArtefacts(artefacts);
-			InterfaceModel interfaceModel = configureArcan();
-			runArcanDetection(interfaceModel);
+		artefactsDownloadService.downloadArtefacts(projectId, versionId).subscribe(artefacts -> {
+			try {
+				prepareArtefacts(artefacts);
+				InterfaceModel interfaceModel = configureArcan();
+				runArcanDetection(interfaceModel);
+			} catch (IOException | ZipException | RuntimeException | TypeVertexException e) {
+			}
 		});
 	}
-	
-	private void prepareArtefacts(Resource artefacts) {
+
+	private void prepareArtefacts(Resource artefacts) throws IOException, ZipException, RuntimeException {
 		InputStream inputStream = null;
 		try {
 			inputStream = artefacts.getInputStream();
 			File tempArtefactsZip = File.createTempFile(analysisId, ".zip");
 			FileUtils.copyInputStreamToFile(inputStream, tempArtefactsZip);
-			
+
 			String filepath = analysisDir.getPath() + "/" + tempArtefactsZip.getName();
 			File zipArtefacts = Paths.get(filepath).toFile();
 			Files.move(tempArtefactsZip, zipArtefacts);
-			
+
 			ZipFile zipFile = new ZipFile(zipArtefacts);
-			if(!zipFile.isValidZipFile()) {
+			if (!zipFile.isValidZipFile()) {
 				throw new ZipException("Zip file is invalid");
 			}
-	        zipFile.extractAll(analysisDir.getAbsolutePath());
-	        zipArtefacts.delete();
-	        checkValidJarFolder();
+			zipFile.extractAll(analysisDir.getAbsolutePath());
+			zipArtefacts.delete();
+			checkValidJarFolder();
 		} catch (IOException | ZipException | RuntimeException e) {
-			analysisProducer
-					.dispatch(AnalysisMessage.build(analysisId, projectId, versionId, AnalysisStatus.FAILED));
+			analysisProducer.dispatch(AnalysisMessage.build(analysisId, projectId, versionId, AnalysisStatus.FAILED));
 			log.error("Analysis job for project with id: " + versionId + " failed due to {}", e.getMessage());
+			throw e;
 		} finally {
-		    IOUtils.closeQuietly(inputStream);
+			IOUtils.closeQuietly(inputStream);
 		}
 	}
-	
+
 	private void checkValidJarFolder() throws RuntimeException {
 		File[] files = analysisDir.listFiles();
-		
-		if(1 != files.length || 1 > files[0].listFiles().length) {
+
+		if (1 != files.length || 1 > files[0].listFiles().length) {
 			throw new RuntimeException("Invalid JARs folder");
 		}
 	}
@@ -122,8 +124,8 @@ public class AnalysisJob extends QuartzJobBean {
 		interfaceModel.createOutPutFolder();
 		return interfaceModel;
 	}
-	
-	private void runArcanDetection(InterfaceModel interfaceModel) {
+
+	private void runArcanDetection(InterfaceModel interfaceModel) throws TypeVertexException, IOException {
 		interfaceModel.buildGraphTinkerpop();
 		try {
 			interfaceModel.runCycleDetectorShapeFilter();
@@ -131,12 +133,13 @@ public class AnalysisJob extends QuartzJobBean {
 			interfaceModel.runUnstableDependencies();
 			interfaceModel.createCSVClassesMetrics();
 			interfaceModel.createCSVPackageMetrics();
-			analysisProducer.dispatch(AnalysisMessage.build(analysisId, projectId, versionId, AnalysisStatus.COMPLETED));
+			analysisProducer
+					.dispatch(AnalysisMessage.build(analysisId, projectId, versionId, AnalysisStatus.COMPLETED));
 			log.info("Analysis job for project with id: " + projectId + " completed!");
 		} catch (TypeVertexException | IOException e) {
-			analysisProducer
-					.dispatch(AnalysisMessage.build(analysisId, projectId, versionId, AnalysisStatus.FAILED));
+			analysisProducer.dispatch(AnalysisMessage.build(analysisId, projectId, versionId, AnalysisStatus.FAILED));
 			log.error("Analysis job for project with id: " + versionId + " failed due to {}", e.getMessage());
+			throw e;
 		} finally {
 			interfaceModel.closeGraph();
 		}

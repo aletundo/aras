@@ -1,7 +1,5 @@
 package it.unimib.disco.aras.analysesexecutorservice.stream.message;
 
-import java.net.URI;
-
 import lombok.Builder;
 import lombok.Data;
 
@@ -10,5 +8,5 @@ import lombok.Data;
 public class AnalysisResultsMessage {
 	private String id;
 	private String analysisId;
-	private URI downloadUri;
+	private String downloadUriString;
 }
