@@ -57,6 +57,10 @@ services:
     networks:
       - shared-mongodb-net
       - backend-net
+    volumes:
+      - type: bind
+        source: ./reports-service/data
+        target: /data
   notifications-service:
     build:
       context: notifications-service/
