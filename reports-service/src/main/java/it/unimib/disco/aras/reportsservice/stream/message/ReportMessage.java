@@ -8,5 +8,6 @@ import lombok.Data;
 public class ReportMessage {
 	private String id;
 	private String analysisId;
-	private String downloadUri;
+	private String downloadUriString;
+	private ReportStatus reportStatus;
 }

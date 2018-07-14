@@ -24,7 +24,7 @@ public class ReportProducerImpl implements Producer<ReportMessage> {
 
 		messageChannel.send(MessageBuilder.withPayload(report)
 				.setHeader(MessageHeaders.CONTENT_TYPE, MimeTypeUtils.APPLICATION_JSON).build());
-		log.info("Report message about notification " + report.getId() + " dispatched!");
+		log.debug("Report message about report " + report.getId() + " dispatched!");
 	}
 
 }
