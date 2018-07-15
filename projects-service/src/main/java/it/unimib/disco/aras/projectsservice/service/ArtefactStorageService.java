@@ -21,17 +21,39 @@ import it.unimib.disco.aras.projectsservice.entity.Project;
 import it.unimib.disco.aras.projectsservice.repository.ProjectRepository;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * The Class ArtefactStorageService.
+ */
 @Service
+
+/** The Constant log. */
 @Slf4j
 public class ArtefactStorageService {
+	
+	/** The project repository. */
 	@Autowired
 	private ProjectRepository projectRepository;
 
+	/** The Constant UPLOADS_DIR. */
 	private static final String UPLOADS_DIR = "/data/artefacts/";
 
+	/** The publisher. */
 	@Autowired
 	private ApplicationEventPublisher publisher;
 
+	/**
+	 * Store.
+	 *
+	 * @param projectId
+	 *            the project id
+	 * @param versionId
+	 *            the version id
+	 * @param artefact
+	 *            the artefact
+	 * @return the project
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
 	public Project store(String projectId, String versionId, MultipartFile artefact) throws IOException {
 		File versionArtefactsPath = new File(UPLOADS_DIR + projectId + "/" + versionId + "/");
 
@@ -63,6 +85,15 @@ public class ArtefactStorageService {
 		return savedProject;
 	}
 
+	/**
+	 * Load.
+	 *
+	 * @param versionId
+	 *            the version id
+	 * @return the resource
+	 * @throws MalformedURLException
+	 *             the malformed URL exception
+	 */
 	public Resource load(String versionId) throws MalformedURLException {
 		Project project = projectRepository.findByVersionId(versionId)
 				.orElseThrow(ResourceNotFoundException::new);

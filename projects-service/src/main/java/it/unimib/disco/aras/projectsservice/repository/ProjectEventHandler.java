@@ -16,13 +16,23 @@ import org.springframework.stereotype.Service;
 import it.unimib.disco.aras.projectsservice.entity.Project;
 import it.unimib.disco.aras.projectsservice.entity.Version;
 
+/**
+ * The Class ProjectEventHandler.
+ */
 @Service
 @RepositoryEventHandler(Project.class)
 public class ProjectEventHandler {
 
+	/** The project repository. */
 	@Autowired
 	private ProjectRepository projectRepository;
 
+	/**
+	 * Handle creating project.
+	 *
+	 * @param project
+	 *            the project
+	 */
 	@HandleBeforeCreate
 	public void handleCreatingProject(Project project) {
 		if (checkInputString(project.getName()) || checkInputString(project.getDescription())) {
@@ -34,6 +44,12 @@ public class ProjectEventHandler {
 		project.setUpdatedAt(now);
 	}
 
+	/**
+	 * Handle saving project.
+	 *
+	 * @param project
+	 *            the project
+	 */
 	@HandleBeforeSave
 	public void handleSavingProject(Project project) {
 		final Date now = Date.from(Instant.now());
@@ -57,6 +73,15 @@ public class ProjectEventHandler {
 		project.setUpdatedAt(now);
 	}
 	
+	/**
+	 * Checks if is dirty.
+	 *
+	 * @param currentVersions
+	 *            the current versions
+	 * @param v
+	 *            the v
+	 * @return true, if is dirty
+	 */
 	private boolean isDirty(List<Version> currentVersions, Version v) {
 		boolean isDirty = false;
 		for(Version cv : currentVersions) {
@@ -67,10 +92,24 @@ public class ProjectEventHandler {
 		return isDirty || !currentVersions.contains(v);
 	}
 	
+	/**
+	 * Check input string.
+	 *
+	 * @param input
+	 *            the input
+	 * @return true, if successful
+	 */
 	private boolean checkInputString(String input) {
 		return (input == null || input.trim().length() == 0);
 	}
 	
+	/**
+	 * Checks if is valid version.
+	 *
+	 * @param version
+	 *            the version
+	 * @return true, if is valid version
+	 */
 	private boolean isValidVersion(Version version) {
 		return !checkInputString(version.getName()) && !checkInputString(version.getDescription());
 	}

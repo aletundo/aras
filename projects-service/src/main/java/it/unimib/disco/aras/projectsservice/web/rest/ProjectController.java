@@ -22,17 +22,35 @@ import it.unimib.disco.aras.projectsservice.repository.ProjectRepository;
 import it.unimib.disco.aras.projectsservice.service.ArtefactStorageService;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * The Class ProjectController.
+ */
 @RestController
 @RequestMapping("/projects/{projectId}/versions/{versionId}")
+
+/** The Constant log. */
 @Slf4j
 public class ProjectController {
 
+	/** The artefact storage service. */
 	@Autowired
 	private ArtefactStorageService artefactStorageService;
 
+	/** The project repository. */
 	@Autowired
 	private ProjectRepository projectRepository;
 
+	/**
+	 * Upload version artefacts.
+	 *
+	 * @param projectId
+	 *            the project id
+	 * @param versionId
+	 *            the version id
+	 * @param artefact
+	 *            the artefact
+	 * @return the response entity
+	 */
 	@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<?> uploadVersionArtefacts(@PathVariable("projectId") String projectId,
 			@PathVariable("versionId") String versionId, @RequestParam("artefact") MultipartFile artefact) {
@@ -51,6 +69,15 @@ public class ProjectController {
 		}
 	}
 
+	/**
+	 * Download version artefacts.
+	 *
+	 * @param projectId
+	 *            the project id
+	 * @param versionId
+	 *            the version id
+	 * @return the response entity
+	 */
 	@GetMapping(value = "/artefacts", produces = "application/zip")
 	public ResponseEntity<?> downloadVersionArtefacts(@PathVariable("projectId") String projectId,
 			@PathVariable("versionId") String versionId) {
