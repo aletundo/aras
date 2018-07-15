@@ -75,7 +75,8 @@ public class ProjectService {
 		assertThat(status).isEqualTo(HttpStatus.OK);
 		assertThat(body.at("/versions").isArray()).isEqualTo(true);
 		assertThat(body.at("/versions").size()).isEqualTo(1);
-		assertThat(body.at("/versions").get(0).at("/name").asText()).isEqualTo("TestVersion");
+		assertThat(body.at("/versions/0/name").asText()).isEqualTo("TestVersion");
+		assertThat(body.at("/versions/0/description").asText()).isEqualTo("A beautiful version description");
 		
 		return response;
 	}
@@ -108,7 +109,8 @@ public class ProjectService {
 		JsonNode body = objectMapper.readTree(response.getBody());
 		HttpStatus status = response.getStatusCode();
 		assertThat(status).isEqualTo(HttpStatus.OK);
-		assertThat(body.at("/versions").get(0).at("/artefactsPath").isMissingNode()).isEqualTo(false);
+		assertThat(body.at("/versions/0/artefactsPath").isMissingNode()).isEqualTo(false);
+		assertThat(body.at("/versions/0/artefactsPath").textValue()).isEqualTo("/data/artefacts/" + projectId + "/" + versionId + "/validZip.zip");
 		return response;
 	}
 	
@@ -118,7 +120,8 @@ public class ProjectService {
 		JsonNode body = objectMapper.readTree(response.getBody());
 		HttpStatus status = response.getStatusCode();
 		assertThat(status).isEqualTo(HttpStatus.OK);
-		assertThat(body.at("/versions").get(0).at("/artefactsPath").isMissingNode()).isEqualTo(false);
+		assertThat(body.at("/versions/0/artefactsPath").isMissingNode()).isEqualTo(false);
+		assertThat(body.at("/versions/0/artefactsPath").textValue()).isEqualTo("/data/artefacts/" + projectId + "/" + versionId + "/emptyZip.zip");
 		return response;
 	}
 	

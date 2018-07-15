@@ -79,11 +79,40 @@ public class TestsuiteApplicationTests {
 	}
 	
 
-//	@Test
-//	public void dummy() throws Exception {
-//		
-//		//analysisConfigurationService.createValidConfiguration();
-//		//analysisConfigurationService.createInvalidConfiguration();
+	@Test
+	public void dummy() throws Exception {
+		ResponseEntity<String> response = projectService.createValidProject();
+		JsonNode body = objectMapper.readTree(response.getBody());
+		String projectId = body.get("id").textValue();
+		response = projectService.createValidProjectVersion(projectId);
+		body = objectMapper.readTree(response.getBody());
+		String versionId = body.at("/versions").get(0).get("id").textValue();
+		response = analysisConfigurationService.createValidConfiguration(projectId, versionId);
+		body = objectMapper.readTree(response.getBody());
+		String configurationId = body.get("id").textValue();
+		analysisConfigurationService.createInvalidConfiguration();
+		projectService.uploadValidArtefactsZip(projectId, versionId);
+		response = analysisService.createStartNowAnalysisWithValidConfig(configurationId);
+		body = objectMapper.readTree(response.getBody());
+		String analysisId = body.get("id").textValue();
+		
+		final Set<String> statusesToCheck = newLinkedHashSet(AnalysisStatus.CREATED.name(), AnalysisStatus.SCHEDULED.name(),
+				AnalysisStatus.RUNNING.name(), AnalysisStatus.COMPLETED.name());
+		
+		analysisService.verifyAnalysesMessages(1, statusesToCheck);
+		
+		await().atMost(10, SECONDS).untilAsserted(() -> {
+			notificationService.verifyAnalysisCreatedStatusNotification(analysisId);
+			notificationService.verifyAnalysisScheduledStatusNotification(analysisId);
+			notificationService.verifyAnalysisRunningStatusNotification(analysisId);
+			notificationService.verifyAnalysisCompletedStatusNotification(analysisId);
+		});
+		
+		await().atMost(10, SECONDS).untilAsserted(() -> analysisService.verifyAnalysisResultsCreated(analysisId));
+		await().atMost(10, SECONDS).untilAsserted(() -> reportService.verifyReportGenerated(analysisId));
+		reportService.verifyReportGeneratedMessage(ReportStatus.GENERATED);
+		await().atMost(10, SECONDS).untilAsserted(() -> notificationService.verifyReportGeneratedNotification(analysisId));
+		
 //		ResponseEntity<String> response = projectService.createValidProject();
 //		JsonNode body = objectMapper.readTree(response.getBody());
 //		String projectId = body.get("id").textValue();
@@ -113,8 +142,8 @@ public class TestsuiteApplicationTests {
 //		await().atMost(10, SECONDS).untilAsserted(() -> reportService.verifyReportGenerated(analysisId));
 //		reportService.verifyReportGeneratedMessage(ReportStatus.GENERATED);
 //		await().atMost(10, SECONDS).untilAsserted(() -> notificationService.verifyReportGeneratedNotification(analysisId));
-//		
-//		//projectService.uploadValidEmptyArtefactsZip(projectId, versionId);
-//		//projectService.uploadInvalidArtefactsZip(projectId, versionId);
-//	}
+		
+		//projectService.uploadValidEmptyArtefactsZip(projectId, versionId);
+		//projectService.uploadInvalidArtefactsZip(projectId, versionId);
+	}
 }

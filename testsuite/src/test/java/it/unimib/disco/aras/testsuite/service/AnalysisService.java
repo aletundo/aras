@@ -49,17 +49,8 @@ public class AnalysisService {
 		this.dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz");
 	}
 
-	public ResponseEntity<String> createStartNowAnalysisWithValidConfig(String projectId, String versionId,
-			Map<String, String> arcanParameters) throws IOException, InterruptedException {
-		ObjectNode configurationObject = objectMapper.getNodeFactory().objectNode().put("projectId", projectId)
-				.put("versionId", versionId);
-
-		ObjectNode parametersObject = objectMapper.getNodeFactory().objectNode();
-
-		for (String key : arcanParameters.keySet()) {
-			parametersObject.put(key, arcanParameters.get(key));
-		}
-		configurationObject.set("arcanParameters", parametersObject);
+	public ResponseEntity<String> createStartNowAnalysisWithValidConfig(String configurationId) throws IOException, InterruptedException {
+		ObjectNode configurationObject = objectMapper.getNodeFactory().objectNode().put("id", configurationId);
 
 		ObjectNode jsonObject = objectMapper.getNodeFactory().objectNode();
 
@@ -74,23 +65,16 @@ public class AnalysisService {
 
 		assertThat(status).isEqualTo(HttpStatus.CREATED);
 		assertThat(headers.getLocation()).isNotNull();
+		assertThat(body.at("/id").isMissingNode()).isEqualTo(false);
 		assertThat(body.at("/_links/self").isMissingNode()).isEqualTo(false);
 		assertThat(body.at("/_links/self").isNull()).isEqualTo(false);
 
 		return response;
 	}
 
-	public void createStartNowAnalysisWithInvalidConfig(String projectId, String versionId,
-			Map<String, String> arcanParameters) throws JsonProcessingException {
+	public void createStartNowAnalysisWithInvalidConfig() throws JsonProcessingException {
 
-		ObjectNode configurationObject = objectMapper.getNodeFactory().objectNode().put("projectId", projectId);
-
-		ObjectNode parametersObject = objectMapper.getNodeFactory().objectNode();
-
-		for (String key : arcanParameters.keySet()) {
-			parametersObject.put(key, arcanParameters.get(key));
-		}
-		configurationObject.set("arcanParameters", parametersObject);
+		ObjectNode configurationObject = objectMapper.getNodeFactory().objectNode().put("configurationId", "");
 
 		ObjectNode jsonObject = objectMapper.getNodeFactory().objectNode();
 
@@ -104,18 +88,9 @@ public class AnalysisService {
 		assertThat(status).isEqualTo(HttpStatus.BAD_REQUEST);
 	}
 
-	public ResponseEntity<String> createScheduledAnalysisWithValidConfigAndValidStartTime(String projectId,
-			String versionId, Map<String, String> arcanParameters) throws IOException, InterruptedException {
+	public ResponseEntity<String> createScheduledAnalysisWithValidConfigAndValidStartTime(String configurationId) throws IOException, InterruptedException {
 
-		ObjectNode configurationObject = objectMapper.getNodeFactory().objectNode().put("projectId", projectId)
-				.put("versionId", versionId);
-
-		ObjectNode parametersObject = objectMapper.getNodeFactory().objectNode();
-
-		for (String key : arcanParameters.keySet()) {
-			parametersObject.put(key, arcanParameters.get(key));
-		}
-		configurationObject.set("arcanParameters", parametersObject);
+		ObjectNode configurationObject = objectMapper.getNodeFactory().objectNode().put("id", configurationId);
 
 		ObjectNode jsonObject = objectMapper.getNodeFactory().objectNode();
 
@@ -136,16 +111,8 @@ public class AnalysisService {
 		return response;
 	}
 
-	public void createScheduledAnalysisWithInvalidConfigAndValidStartTime(String projectId, String versionId,
-			Map<String, String> arcanParameters) throws JsonProcessingException {
-		ObjectNode configurationObject = objectMapper.getNodeFactory().objectNode().put("projectId", projectId);
-
-		ObjectNode parametersObject = objectMapper.getNodeFactory().objectNode();
-
-		for (String key : arcanParameters.keySet()) {
-			parametersObject.put(key, arcanParameters.get(key));
-		}
-		configurationObject.set("arcanParameters", parametersObject);
+	public void createScheduledAnalysisWithInvalidConfigAndValidStartTime() throws JsonProcessingException {
+		ObjectNode configurationObject = objectMapper.getNodeFactory().objectNode().put("configurationId", "");
 
 		ObjectNode jsonObject = objectMapper.getNodeFactory().objectNode();
 
@@ -160,17 +127,9 @@ public class AnalysisService {
 		assertThat(status).isEqualTo(HttpStatus.BAD_REQUEST);
 	}
 
-	public void createScheduledAnalysisWithValidConfigAndInvalidStartTime(String projectId, String versionId,
-			Map<String, String> arcanParameters) throws JsonProcessingException {
-		ObjectNode configurationObject = objectMapper.getNodeFactory().objectNode().put("projectId", projectId)
-				.put("versionId", versionId);
+	public void createScheduledAnalysisWithValidConfigAndInvalidStartTime(String configurationId) throws JsonProcessingException {
 
-		ObjectNode parametersObject = objectMapper.getNodeFactory().objectNode();
-
-		for (String key : arcanParameters.keySet()) {
-			parametersObject.put(key, arcanParameters.get(key));
-		}
-		configurationObject.set("arcanParameters", parametersObject);
+		ObjectNode configurationObject = objectMapper.getNodeFactory().objectNode().put("id", configurationId);
 
 		ObjectNode jsonObject = objectMapper.getNodeFactory().objectNode();
 

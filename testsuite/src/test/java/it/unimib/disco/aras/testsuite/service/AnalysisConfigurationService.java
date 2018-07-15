@@ -32,7 +32,7 @@ public class AnalysisConfigurationService {
 	@Autowired
 	private ObjectMapper objectMapper;
 	
-	public void createValidConfiguration(String projectId, String versionId) throws RestClientException, IOException, InterruptedException {
+	public ResponseEntity<String> createValidConfiguration(String projectId, String versionId) throws RestClientException, IOException, InterruptedException {
 		ObjectNode jsonObject = objectMapper.getNodeFactory().objectNode()
 				.put("projectId", projectId)
 				.put("versionId", versionId);
@@ -55,6 +55,8 @@ public class AnalysisConfigurationService {
 		analysisConfigurationConsumer.getLatch().await(1, TimeUnit.MINUTES);
 		assertThat(analysisConfigurationConsumer.getLatch().getCount()).isEqualTo(0);
 		assertThat(analysisConfigurationConsumer.getMessages().get(0).getProjectId()).isEqualTo(projectId);
+		
+		return response;
 	}
 	
 	public void createInvalidConfiguration() throws RestClientException, IOException, InterruptedException {

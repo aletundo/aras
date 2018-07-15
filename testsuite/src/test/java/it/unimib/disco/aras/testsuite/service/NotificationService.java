@@ -103,6 +103,7 @@ public class NotificationService {
 		JsonNode body = objectMapper.readTree(response.getBody());
 		HttpStatus status = response.getStatusCode();
 		assertThat(status).isEqualTo(HttpStatus.OK);
+		assertThat(body.at("/_embedded/report-notifications").isArray()).isEqualTo(true);
 		assertThat(body.at("/_embedded/report-notifications/0/reportStatus").textValue()).isEqualTo("GENERATED");
 		assertThat(body.at("/_embedded/report-notifications/0/analysisId").textValue()).isEqualTo(analysisId);
 	}
@@ -112,6 +113,7 @@ public class NotificationService {
 		JsonNode body = objectMapper.readTree(response.getBody());
 		HttpStatus status = response.getStatusCode();
 		assertThat(status).isEqualTo(HttpStatus.OK);
+		assertThat(body.at("/_embedded/report-notifications").isArray()).isEqualTo(true);
 		assertThat(body.at("/_embedded/report-notifications/0/reportStatus").textValue()).isEqualTo("FAILED");
 		assertThat(body.at("/_embedded/report-notifications/0/analysisId").textValue()).isEqualTo(analysisId);
 	}
