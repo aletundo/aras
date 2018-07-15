@@ -11,13 +11,22 @@ import it.unimib.disco.aras.notificationsservice.stream.NotificationsStream;
 import it.unimib.disco.aras.notificationsservice.stream.message.NotificationMessage;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * The Class NotificationProducerImpl.
+ */
 @Service
+
+/** The Constant log. */
 @Slf4j
 public class NotificationProducerImpl implements Producer<NotificationMessage> {
 
+	/** The notifications stream. */
 	@Autowired
 	private NotificationsStream notificationsStream;
 
+	/* (non-Javadoc)
+	 * @see it.unimib.disco.aras.notificationsservice.stream.producer.Producer#dispatch(java.lang.Object)
+	 */
 	@Override
 	public void dispatch(final NotificationMessage notification) {
 		MessageChannel messageChannel = notificationsStream.outboundNotifications();

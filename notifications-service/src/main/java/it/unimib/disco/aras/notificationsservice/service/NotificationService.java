@@ -20,25 +20,41 @@ import it.unimib.disco.aras.notificationsservice.stream.message.ReportStatus;
 import it.unimib.disco.aras.notificationsservice.stream.producer.Producer;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * The Class NotificationService.
+ */
 @Service
+
+/** The Constant log. */
 @Slf4j
 public class NotificationService {
 
+	/** The notification producer. */
 	@Autowired
 	private Producer<NotificationMessage> notificationProducer;
 
+	/** The status notification repository. */
 	@Autowired
 	private StatusNotificationRepository statusNotificationRepository;
 	
+	/** The report notification repository. */
 	@Autowired
 	private ReportNotificationRepository reportNotificationRepository;
 
+	/** The email service. */
 	@Autowired
 	private EmailService emailService;
 	
+	/** The reports download service. */
 	@Autowired
 	private ReportsDownloadService reportsDownloadService;
 
+	/**
+	 * Send analysis status notification.
+	 *
+	 * @param analysis
+	 *            the analysis
+	 */
 	public void sendAnalysisStatusNotification(AnalysisMessage analysis) {
 		// TODO:
 		// - get subscribers
@@ -55,6 +71,12 @@ public class NotificationService {
 				.dispatch(NotificationMessage.builder().id(notification.getId()).type(NotificationType.STATUS).build());
 	}
 	
+	/**
+	 * Send report notification.
+	 *
+	 * @param report
+	 *            the report
+	 */
 	public void sendReportNotification(ReportMessage report) {
 		// TODO:
 		// - get subscribers
@@ -74,6 +96,12 @@ public class NotificationService {
 		
 	}
 	
+	/**
+	 * Send report failed notification.
+	 *
+	 * @param analysisId
+	 *            the analysis id
+	 */
 	private void sendReportFailedNotification(String analysisId) {
 		emailService.sendSimpleMessage(System.getenv("NOTIFICATIONS_TO_ADDRESS_DEV"),
 				"[ARAS] Failed report generation",
@@ -88,6 +116,16 @@ public class NotificationService {
 		
 	}
 
+	/**
+	 * Send report generated notification.
+	 *
+	 * @param reportId
+	 *            the report id
+	 * @param analysisId
+	 *            the analysis id
+	 * @param downloadUriString
+	 *            the download uri string
+	 */
 	private void sendReportGeneratedNotification(String reportId, String analysisId, String downloadUriString) {
 		reportsDownloadService.downloadReport(downloadUriString).subscribe(pdfReport -> {
 			try {
