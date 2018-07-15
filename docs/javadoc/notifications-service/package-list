@@ -1,9 +1,0 @@
-it.unimib.disco.aras.notificationsservice
-it.unimib.disco.aras.notificationsservice.config
-it.unimib.disco.aras.notificationsservice.entity
-it.unimib.disco.aras.notificationsservice.repository
-it.unimib.disco.aras.notificationsservice.service
-it.unimib.disco.aras.notificationsservice.stream
-it.unimib.disco.aras.notificationsservice.stream.consumer
-it.unimib.disco.aras.notificationsservice.stream.message
-it.unimib.disco.aras.notificationsservice.stream.producer
