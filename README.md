@@ -4,6 +4,12 @@
 [![Javadoc](https://img.shields.io/badge/javadoc-published-blue.svg)](https://aletundo.github.io/aras/javadoc/)
 
 **SERVICES QUALITY**:
+* _**config-server**_: [![config-server Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=it.unimib.disco.aras%3Aconfig-server&metric=alert_status)](https://sonarcloud.io/dashboard?id=it.unimib.disco.aras%3Aconfig-server)
+[![config-server Maintainability](https://sonarcloud.io/api/project_badges/measure?project=it.unimib.disco.aras%3Aconfig-server&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=it.unimib.disco.aras%3Aconfig-server)
+* _**eureka-server**_: [![eureka-server Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=it.unimib.disco.aras%3Aeureka-server&metric=alert_status)](https://sonarcloud.io/dashboard?id=it.unimib.disco.aras%3Aeureka-server)
+[![eureka-server Maintainability](https://sonarcloud.io/api/project_badges/measure?project=it.unimib.disco.aras%3Aeureka-server&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=it.unimib.disco.aras%3Aeureka-server)
+* _**gateway**_: [![gateway Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=it.unimib.disco.aras%3Agateway&metric=alert_status)](https://sonarcloud.io/dashboard?id=it.unimib.disco.aras%3Agateway)
+[![gateway Maintainability](https://sonarcloud.io/api/project_badges/measure?project=it.unimib.disco.aras%3Agateway&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=it.unimib.disco.aras%3Agateway)
 * _**projects-service**_: [![project-service Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=it.unimib.disco.aras%3Aprojects-service&metric=alert_status)](https://sonarcloud.io/dashboard?id=it.unimib.disco.aras%3Aprojects-service)
 [![project-service Maintainability](https://sonarcloud.io/api/project_badges/measure?project=it.unimib.disco.aras%3Aprojects-service&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=it.unimib.disco.aras%3Aprojects-service)
 * _**reports-service**_: [![reports-service Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=it.unimib.disco.aras%3Areports-service&metric=alert_status)](https://sonarcloud.io/dashboard?id=it.unimib.disco.aras%3Areportts-service)
