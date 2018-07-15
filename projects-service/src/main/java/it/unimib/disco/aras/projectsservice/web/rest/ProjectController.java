@@ -55,7 +55,7 @@ public class ProjectController {
 	public ResponseEntity<?> downloadVersionArtefacts(@PathVariable("projectId") String projectId,
 			@PathVariable("versionId") String versionId) {
 		try {
-			Resource artefacts = artefactStorageService.load(projectId, versionId);
+			Resource artefacts = artefactStorageService.load(versionId);
 			HttpHeaders headers = new HttpHeaders();
 			headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + artefacts.getFilename());
 			return ResponseEntity.ok().headers(headers).body(new InputStreamResource(artefacts.getInputStream()));

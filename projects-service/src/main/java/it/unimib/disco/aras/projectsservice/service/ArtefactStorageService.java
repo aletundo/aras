@@ -50,7 +50,7 @@ public class ArtefactStorageService {
 		Path path = Paths.get(filepath);
 		Files.write(path, bytes);
 
-		Project project = projectRepository.findById(projectId).orElseThrow(() -> new ResourceNotFoundException());
+		Project project = projectRepository.findById(projectId).orElseThrow(ResourceNotFoundException::new);
 		project.getVersions().forEach(v -> {
 			if (v.getId().equals(versionId)) {
 				v.setArtefactsPath(filepath);
@@ -63,9 +63,9 @@ public class ArtefactStorageService {
 		return savedProject;
 	}
 
-	public Resource load(String projectId, String versionId) throws MalformedURLException {
+	public Resource load(String versionId) throws MalformedURLException {
 		Project project = projectRepository.findByVersionId(versionId)
-				.orElseThrow(() -> new ResourceNotFoundException());
+				.orElseThrow(ResourceNotFoundException::new);
 
 		Path filepath = Paths.get(project.getVersion(versionId).getArtefactsPath()).toAbsolutePath().normalize();
 		Resource resource = new UrlResource(filepath.toUri());
