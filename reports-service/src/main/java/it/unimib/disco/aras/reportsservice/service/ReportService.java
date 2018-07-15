@@ -38,21 +38,38 @@ import lombok.extern.slf4j.Slf4j;
 import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
 
+/**
+ * The Class ReportService.
+ */
 @Service
+
+/** The Constant log. */
 @Slf4j
 public class ReportService {
 
+	/** The Constant REPORTS_DIR. */
 	private static final String REPORTS_DIR = "/data/reports/";
 
+	/** The report producer. */
 	@Autowired
 	private Producer<ReportMessage> reportProducer;
 
+	/** The analysis results download service. */
 	@Autowired
 	private AnalysisResultsDownloadService analysisResultsDownloadService;
 
+	/** The report repository. */
 	@Autowired
 	private ReportRepository reportRepository;
 
+	/**
+	 * Generate report.
+	 *
+	 * @param analysisId
+	 *            the analysis id
+	 * @param resultsDownloadUri
+	 *            the results download uri
+	 */
 	public void generateReport(String analysisId, String resultsDownloadUri) {
 		analysisResultsDownloadService.downloadAnalysisResults(resultsDownloadUri).subscribe(results -> {
 			Date createdAt = Date.from(Instant.now());
@@ -76,6 +93,20 @@ public class ReportService {
 		});
 	}
 
+	/**
+	 * Creates the pdf.
+	 *
+	 * @param analysisId
+	 *            the analysis id
+	 * @param reportFilenameString
+	 *            the report filename string
+	 * @param reportDir
+	 *            the report dir
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 * @throws XDocReportException
+	 *             the x doc report exception
+	 */
 	private void createPdf(String analysisId, String reportFilenameString, File reportDir)
 			throws IOException, XDocReportException {
 		try {
@@ -97,6 +128,20 @@ public class ReportService {
 		}
 	}
 
+	/**
+	 * Unzip results.
+	 *
+	 * @param results
+	 *            the results
+	 * @param reportDir
+	 *            the report dir
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 * @throws ZipException
+	 *             the zip exception
+	 * @throws RuntimeException
+	 *             the runtime exception
+	 */
 	private void unzipResults(Resource results, File reportDir) throws IOException, ZipException, RuntimeException {
 		try {
 			InputStream inputStream = results.getInputStream();
@@ -119,6 +164,15 @@ public class ReportService {
 		}
 	}
 
+	/**
+	 * Load report.
+	 *
+	 * @param reportId
+	 *            the report id
+	 * @return the resource
+	 * @throws MalformedURLException
+	 *             the malformed URL exception
+	 */
 	public Resource loadReport(String reportId) throws MalformedURLException {
 		Report report = reportRepository.findById(reportId)
 				.orElseThrow(() -> new ResourceNotFoundException());

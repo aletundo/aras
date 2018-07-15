@@ -8,12 +8,26 @@ import org.springframework.web.reactive.function.client.WebClient;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 
+/**
+ * The Class AnalysisResultsDownloadService.
+ */
 @Service
+
+/** The Constant log. */
 @Slf4j
 public class AnalysisResultsDownloadService {
+	
+	/** The web client builder. */
 	@Autowired
 	private WebClient.Builder webClientBuilder;
 
+	/**
+	 * Download analysis results.
+	 *
+	 * @param downloadUriString
+	 *            the download uri string
+	 * @return the mono
+	 */
 	public Mono<Resource> downloadAnalysisResults(String downloadUriString) {
 		Mono<Resource> analysisResults = webClientBuilder.build().get()
 				.uri("http://analyses-executor-service" + downloadUriString)

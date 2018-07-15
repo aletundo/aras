@@ -11,13 +11,22 @@ import it.unimib.disco.aras.reportsservice.stream.ReportsStream;
 import it.unimib.disco.aras.reportsservice.stream.message.ReportMessage;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * The Class ReportProducerImpl.
+ */
 @Service
+
+/** The Constant log. */
 @Slf4j
 public class ReportProducerImpl implements Producer<ReportMessage> {
 
+	/** The reports stream. */
 	@Autowired
 	private ReportsStream reportsStream;
 
+	/* (non-Javadoc)
+	 * @see it.unimib.disco.aras.reportsservice.stream.producer.Producer#dispatch(java.lang.Object)
+	 */
 	@Override
 	public void dispatch(final ReportMessage report) {
 		MessageChannel messageChannel = reportsStream.outboundReports();

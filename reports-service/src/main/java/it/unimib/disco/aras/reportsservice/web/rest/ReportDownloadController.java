@@ -16,14 +16,27 @@ import org.springframework.web.bind.annotation.RestController;
 import it.unimib.disco.aras.reportsservice.service.ReportService;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * The Class ReportDownloadController.
+ */
 @RestController
 @RequestMapping("/reports/{reportId}")
+
+/** The Constant log. */
 @Slf4j
 public class ReportDownloadController {
 	
+	/** The report service. */
 	@Autowired
 	private ReportService reportService;
 	
+	/**
+	 * Download report.
+	 *
+	 * @param reportId
+	 *            the report id
+	 * @return the response entity
+	 */
 	@GetMapping(value = "/download", produces = "application/pdf")
 	public ResponseEntity<?> downloadReport(@PathVariable("reportId") String reportId) {
 		try {
