@@ -5,6 +5,7 @@ import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurerAdapt
 import org.springframework.stereotype.Component;
 
 import it.unimib.disco.aras.analysesexecutorservice.entity.Analysis;
+import it.unimib.disco.aras.analysesexecutorservice.entity.AnalysisConfiguration;
 import it.unimib.disco.aras.analysesexecutorservice.entity.AnalysisResults;
 
 @Component
@@ -12,7 +13,7 @@ public class CustomizedRestMvcConfiguration extends RepositoryRestConfigurerAdap
 
   @Override
   public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config) {
-    config.exposeIdsFor(Analysis.class, AnalysisResults.class);
+    config.exposeIdsFor(Analysis.class, AnalysisResults.class, AnalysisConfiguration.class);
   }
 }
 

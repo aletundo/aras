@@ -37,7 +37,7 @@ public class AnalysisJobService {
 	
 	public void createJob(final String analysisId) throws RuntimeException {
 		try {
-			final Analysis analysis = analysisRepository.findById(analysisId).orElseThrow(() -> new SchedulerException());
+			final Analysis analysis = analysisRepository.findById(analysisId).orElseThrow(SchedulerException::new);
 			final String projectId = analysis.getConfiguration().getProjectId();
 			final String versionId = analysis.getConfiguration().getVersionId();
 			
@@ -64,7 +64,7 @@ public class AnalysisJobService {
 	
 	public void deleteJob(final String analysisId) {
 		try {
-			final Analysis analysis = analysisRepository.findById(analysisId).orElseThrow(() -> new SchedulerException());
+			final Analysis analysis = analysisRepository.findById(analysisId).orElseThrow(SchedulerException::new);
 			final String projectId = analysis.getConfiguration().getProjectId();
 			final String versionId = analysis.getConfiguration().getVersionId();
 			
@@ -79,7 +79,7 @@ public class AnalysisJobService {
 	
 	public void pauseJob(final String analysisId) {
 		try {
-			final Analysis analysis = analysisRepository.findById(analysisId).orElseThrow(() -> new SchedulerException());
+			final Analysis analysis = analysisRepository.findById(analysisId).orElseThrow(SchedulerException::new);
 			final String projectId = analysis.getConfiguration().getProjectId();
 			final String versionId = analysis.getConfiguration().getVersionId();
 			
@@ -94,7 +94,7 @@ public class AnalysisJobService {
 	
 	public void resumeJob(final String analysisId) {
 		try {
-			final Analysis analysis = analysisRepository.findById(analysisId).orElseThrow(() -> new SchedulerException());
+			final Analysis analysis = analysisRepository.findById(analysisId).orElseThrow(SchedulerException::new);
 			final String projectId = analysis.getConfiguration().getProjectId();
 			final String versionId = analysis.getConfiguration().getVersionId();
 			
@@ -109,7 +109,7 @@ public class AnalysisJobService {
 	
 	public void rescheduleJob(final String analysisId, Date startTime) {
 		try {
-			final Analysis analysis = analysisRepository.findById(analysisId).orElseThrow(() -> new SchedulerException());
+			final Analysis analysis = analysisRepository.findById(analysisId).orElseThrow(SchedulerException::new);
 			final String projectId = analysis.getConfiguration().getProjectId();
 			final String versionId = analysis.getConfiguration().getVersionId();
 			

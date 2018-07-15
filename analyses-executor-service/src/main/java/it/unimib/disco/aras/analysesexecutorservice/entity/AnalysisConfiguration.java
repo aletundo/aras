@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AnalysisConfiguration {
     
+	private String id;
     private String projectId;
     private String versionId;
     private Map<String, String> arcanParameters;

@@ -46,7 +46,7 @@ public class AnalysisResultsService {
 
 	public Resource loadResults(String analysisResultsId) throws MalformedURLException, ResourceNotFoundException {
 		AnalysisResults analysisResults = analysisResultsRepository.findById(analysisResultsId)
-				.orElseThrow(() -> new ResourceNotFoundException());
+				.orElseThrow(ResourceNotFoundException::new);
 
 		Path filepath = Paths.get(analysisResults.getResultsPath()).toAbsolutePath().normalize();
 		Resource resource = new UrlResource(filepath.toUri());

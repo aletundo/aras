@@ -9,10 +9,15 @@ import org.springframework.data.rest.core.annotation.HandleBeforeCreate;
 import org.springframework.data.rest.core.annotation.HandleBeforeDelete;
 import org.springframework.data.rest.core.annotation.HandleBeforeSave;
 import org.springframework.data.rest.core.annotation.RepositoryEventHandler;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestTemplate;
 
 import it.unimib.disco.aras.analysesexecutorservice.entity.Analysis;
+import it.unimib.disco.aras.analysesexecutorservice.entity.AnalysisConfiguration;
 import it.unimib.disco.aras.analysesexecutorservice.service.AnalysisJobService;
 import it.unimib.disco.aras.analysesexecutorservice.stream.message.AnalysisMessage;
 import it.unimib.disco.aras.analysesexecutorservice.stream.message.AnalysisStatus;
@@ -30,19 +35,31 @@ public class AnalysisEventHandler {
 	@Autowired
 	private AnalysisJobService analysisJobService;
 	
+	@Autowired
+	private RestTemplate restTemplate;
+	
+	private static final String analysesConfiguratorServiceBaseUrl = "http://analyses-configurator-service";
+	
 	@HandleBeforeCreate
 	public void handleCreatingAnalysis(Analysis analysis) {
-
+		
+		if(null != analysis.getConfiguration() && null != analysis.getConfiguration().getId()) {
+			try {
+				ResponseEntity<AnalysisConfiguration> response = restTemplate.getForEntity(
+						analysesConfiguratorServiceBaseUrl + "/configurations/{configurationId}",
+						AnalysisConfiguration.class, analysis.getConfiguration().getId());
+				analysis.setConfiguration(response.getBody());
+			} catch(RestClientException e) {
+				throw new HttpMessageNotReadableException("Validation failed");
+			}
+			
+		} else {
+			throw new HttpMessageNotReadableException("Validation failed");
+		}
+		
 		if(null == analysis.getStartTime()) {
 			analysis.setStartTime(Date.from(Instant.now()));
 		}
-		if(checkInputString(analysis.getConfiguration().getProjectId())) {
-			throw new HttpMessageNotReadableException("Validation failed");
-		}
-		if(checkInputString(analysis.getConfiguration().getVersionId())) {
-			throw new HttpMessageNotReadableException("Validation failed");
-		}
-		// TODO: validate Arcan Parameters
 	}
 
 	@HandleAfterCreate
