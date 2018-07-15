@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package it.unimib.disco.aras.analysesconfiguratorservice.repository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,19 +17,33 @@ import it.unimib.disco.aras.analysesconfiguratorservice.stream.message.AnalysisC
 import it.unimib.disco.aras.analysesconfiguratorservice.stream.producer.Producer;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * The Class AnalysisConfigurationEventHandler.
+ */
 @Service
 @RepositoryEventHandler(AnalysisConfiguration.class)
+
+/** The Constant log. */
 @Slf4j
 public class AnalysisConfigurationEventHandler {
 
+	/** The producer. */
 	@Autowired
 	private Producer<AnalysisConfigurationMessage> producer;
 
+	/** The rest template. */
 	@Autowired
 	private RestTemplate restTemplate;
 
+	/** The Constant projectsServiceBaseUrl. */
 	private static final String projectsServiceBaseUrl = "http://projects-service";
 
+	/**
+	 * Handle analysis configuration created.
+	 *
+	 * @param configuration
+	 *            the configuration
+	 */
 	@HandleAfterCreate
 	public void handleAnalysisConfigurationCreated(AnalysisConfiguration configuration) {
 		log.info("Configuration with id: " + configuration.getId() + " saved!");
@@ -36,6 +53,12 @@ public class AnalysisConfigurationEventHandler {
 		producer.dispatch(analysisConfigurationMessage);
 	}
 
+	/**
+	 * Handle creating analysis configuration.
+	 *
+	 * @param configuration
+	 *            the configuration
+	 */
 	@HandleBeforeCreate
 	public void handleCreatingAnalysisConfiguration(AnalysisConfiguration configuration) {
 
@@ -44,6 +67,13 @@ public class AnalysisConfigurationEventHandler {
 		}
 	}
 
+	/**
+	 * Checks if is valid configuration.
+	 *
+	 * @param configuration
+	 *            the configuration
+	 * @return true, if is valid configuration
+	 */
 	private boolean isValidConfiguration(AnalysisConfiguration configuration) {
 		String projectId = configuration.getProjectId();
 		String versionId = configuration.getVersionId();
@@ -56,6 +86,13 @@ public class AnalysisConfigurationEventHandler {
 						String.class).getStatusCode());
 	}
 
+	/**
+	 * Checks if is valid input string.
+	 *
+	 * @param input
+	 *            the input
+	 * @return true, if is valid input string
+	 */
 	private boolean isValidInputString(String input) {
 		return (input != null && input.trim().length() != 0);
 	}
