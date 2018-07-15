@@ -30,29 +30,48 @@ import lombok.extern.slf4j.Slf4j;
 import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
 
+/** The Constant log. */
 @Slf4j
+
+/* (non-Javadoc)
+ * @see java.lang.Object#toString()
+ */
 @ToString(callSuper = true)
+
+/* (non-Javadoc)
+ * @see java.lang.Object#hashCode()
+ */
 @EqualsAndHashCode(callSuper = true)
 @Getter
 @Setter
 public class AnalysisJob extends QuartzJobBean {
 
+	/** The Constant ANALYSES_DIR. */
 	private static final String ANALYSES_DIR = "/data/analyses/";
 
+	/** The project id. */
 	private String projectId;
 
+	/** The version id. */
 	private String versionId;
 
+	/** The analysis dir. */
 	private File analysisDir;
 
+	/** The analysis id. */
 	private String analysisId;
 
+	/** The analysis producer. */
 	@Autowired
 	private Producer<AnalysisMessage> analysisProducer;
 
+	/** The artefacts download service. */
 	@Autowired
 	private ArtefactsDownloadService artefactsDownloadService;
 
+	/* (non-Javadoc)
+	 * @see org.springframework.scheduling.quartz.QuartzJobBean#executeInternal(org.quartz.JobExecutionContext)
+	 */
 	@Override
 	protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
 		Analysis analysis = (Analysis) context.getMergedJobDataMap().get("analysis");
@@ -63,6 +82,12 @@ public class AnalysisJob extends QuartzJobBean {
 		runAnalysis(analysis);
 	}
 
+	/**
+	 * Run analysis.
+	 *
+	 * @param analysis
+	 *            the analysis
+	 */
 	private void runAnalysis(Analysis analysis) {
 		projectId = analysis.getConfiguration().getProjectId();
 		versionId = analysis.getConfiguration().getVersionId();
@@ -81,6 +106,18 @@ public class AnalysisJob extends QuartzJobBean {
 		});
 	}
 
+	/**
+	 * Prepare artefacts.
+	 *
+	 * @param artefacts
+	 *            the artefacts
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 * @throws ZipException
+	 *             the zip exception
+	 * @throws RuntimeException
+	 *             the runtime exception
+	 */
 	private void prepareArtefacts(Resource artefacts) throws IOException, ZipException, RuntimeException {
 		InputStream inputStream = null;
 		try {
@@ -108,6 +145,12 @@ public class AnalysisJob extends QuartzJobBean {
 		}
 	}
 
+	/**
+	 * Check valid jar folder.
+	 *
+	 * @throws RuntimeException
+	 *             the runtime exception
+	 */
 	private void checkValidJarFolder() throws RuntimeException {
 		File[] files = analysisDir.listFiles();
 
@@ -116,6 +159,11 @@ public class AnalysisJob extends QuartzJobBean {
 		}
 	}
 
+	/**
+	 * Configure arcan.
+	 *
+	 * @return the interface model
+	 */
 	private InterfaceModel configureArcan() {
 		InterfaceModel interfaceModel = new InterfaceModel();
 		interfaceModel.set_jarsFolderMode(true);
@@ -125,6 +173,16 @@ public class AnalysisJob extends QuartzJobBean {
 		return interfaceModel;
 	}
 
+	/**
+	 * Run arcan detection.
+	 *
+	 * @param interfaceModel
+	 *            the interface model
+	 * @throws TypeVertexException
+	 *             the type vertex exception
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
 	private void runArcanDetection(InterfaceModel interfaceModel) throws TypeVertexException, IOException {
 		interfaceModel.buildGraphTinkerpop();
 		try {

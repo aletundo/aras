@@ -22,19 +22,35 @@ import it.unimib.disco.aras.analysesexecutorservice.stream.message.AnalysisStatu
 import it.unimib.disco.aras.analysesexecutorservice.stream.producer.Producer;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * The Class AnalysisJobService.
+ */
 @Service
+
+/** The Constant log. */
 @Slf4j
 public class AnalysisJobService {
 	
+	/** The scheduler. */
 	@Autowired
 	private Scheduler scheduler;
 	
+	/** The analysis repository. */
 	@Autowired
 	private AnalysisRepository analysisRepository;
 	
+	/** The analysis producer. */
 	@Autowired
 	private Producer<AnalysisMessage> analysisProducer;
 	
+	/**
+	 * Creates the job.
+	 *
+	 * @param analysisId
+	 *            the analysis id
+	 * @throws RuntimeException
+	 *             the runtime exception
+	 */
 	public void createJob(final String analysisId) throws RuntimeException {
 		try {
 			final Analysis analysis = analysisRepository.findById(analysisId).orElseThrow(SchedulerException::new);
@@ -62,6 +78,12 @@ public class AnalysisJobService {
 		}
 	}
 	
+	/**
+	 * Delete job.
+	 *
+	 * @param analysisId
+	 *            the analysis id
+	 */
 	public void deleteJob(final String analysisId) {
 		try {
 			final Analysis analysis = analysisRepository.findById(analysisId).orElseThrow(SchedulerException::new);
@@ -77,6 +99,12 @@ public class AnalysisJobService {
 		}
 	}
 	
+	/**
+	 * Pause job.
+	 *
+	 * @param analysisId
+	 *            the analysis id
+	 */
 	public void pauseJob(final String analysisId) {
 		try {
 			final Analysis analysis = analysisRepository.findById(analysisId).orElseThrow(SchedulerException::new);
@@ -92,6 +120,12 @@ public class AnalysisJobService {
 		}
 	}
 	
+	/**
+	 * Resume job.
+	 *
+	 * @param analysisId
+	 *            the analysis id
+	 */
 	public void resumeJob(final String analysisId) {
 		try {
 			final Analysis analysis = analysisRepository.findById(analysisId).orElseThrow(SchedulerException::new);
@@ -107,6 +141,14 @@ public class AnalysisJobService {
 		}
 	}
 	
+	/**
+	 * Reschedule job.
+	 *
+	 * @param analysisId
+	 *            the analysis id
+	 * @param startTime
+	 *            the start time
+	 */
 	public void rescheduleJob(final String analysisId, Date startTime) {
 		try {
 			final Analysis analysis = analysisRepository.findById(analysisId).orElseThrow(SchedulerException::new);

@@ -5,6 +5,9 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import it.unimib.disco.aras.analysesexecutorservice.entity.Analysis;
 
+/**
+ * The Interface AnalysisRepository.
+ */
 @RepositoryRestResource(collectionResourceRel = "analyses", path = "analyses")
 public interface AnalysisRepository extends MongoRepository<Analysis, String> {
 

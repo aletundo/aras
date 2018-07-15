@@ -11,14 +11,27 @@ import org.springframework.web.bind.annotation.RestController;
 import it.unimib.disco.aras.analysesexecutorservice.service.AnalysisJobService;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * The Class AnalysisController.
+ */
 @RestController
 @RequestMapping("/analysis/{analysisId}")
+
+/** The Constant log. */
 @Slf4j
 public class AnalysisController {
 
+	/** The analysis job service. */
 	@Autowired
 	private AnalysisJobService analysisJobService;
 
+	/**
+	 * Pause analysis.
+	 *
+	 * @param analysisId
+	 *            the analysis id
+	 * @return the response entity
+	 */
 	@PatchMapping("/pause")
 	public ResponseEntity<?> pauseAnalysis(@PathVariable String analysisId) {
 		try {
@@ -30,6 +43,13 @@ public class AnalysisController {
 
 	}
 
+	/**
+	 * Resume.
+	 *
+	 * @param analysisId
+	 *            the analysis id
+	 * @return the response entity
+	 */
 	@PatchMapping("/resume")
 	public ResponseEntity<?> resume(@PathVariable String analysisId) {
 		try {

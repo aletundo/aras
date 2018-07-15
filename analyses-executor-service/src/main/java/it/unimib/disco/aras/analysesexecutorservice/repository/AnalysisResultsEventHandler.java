@@ -10,14 +10,26 @@ import it.unimib.disco.aras.analysesexecutorservice.stream.message.AnalysisResul
 import it.unimib.disco.aras.analysesexecutorservice.stream.producer.Producer;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * The Class AnalysisResultsEventHandler.
+ */
 @Service
 @RepositoryEventHandler(AnalysisResults.class)
+
+/** The Constant log. */
 @Slf4j
 public class AnalysisResultsEventHandler {
 
+	/** The producer. */
 	@Autowired
 	private Producer<AnalysisResultsMessage> producer;
 
+	/**
+	 * Handle analysis results created.
+	 *
+	 * @param analysisResults
+	 *            the analysis results
+	 */
 	@HandleAfterCreate
 	public void handleAnalysisResultsCreated(AnalysisResults analysisResults) {
 		log.debug("Analysis results with id: " + analysisResults.getId() + " saved!");

@@ -20,18 +20,32 @@ import net.lingala.zip4j.exception.ZipException;
 import net.lingala.zip4j.model.ZipParameters;
 import net.lingala.zip4j.util.Zip4jConstants;
 
+/**
+ * The Class AnalysisResultsService.
+ */
 @Service
+
+/** The Constant log. */
 @Slf4j
 public class AnalysisResultsService {
 
+	/** The publisher. */
 	@Autowired
 	private ApplicationEventPublisher publisher;
 
+	/** The analysis results repository. */
 	@Autowired
 	private AnalysisResultsRepository analysisResultsRepository;
 
+	/** The Constant ANALYSES_DIR. */
 	private static final String ANALYSES_DIR = "/data/analyses/";
 
+	/**
+	 * Creates the results.
+	 *
+	 * @param analysisId
+	 *            the analysis id
+	 */
 	public void createResults(String analysisId) {
 		try {
 			String resultsPath = zipResultCSVFiles(analysisId);
@@ -44,6 +58,17 @@ public class AnalysisResultsService {
 		}
 	}
 
+	/**
+	 * Load results.
+	 *
+	 * @param analysisResultsId
+	 *            the analysis results id
+	 * @return the resource
+	 * @throws MalformedURLException
+	 *             the malformed URL exception
+	 * @throws ResourceNotFoundException
+	 *             the resource not found exception
+	 */
 	public Resource loadResults(String analysisResultsId) throws MalformedURLException, ResourceNotFoundException {
 		AnalysisResults analysisResults = analysisResultsRepository.findById(analysisResultsId)
 				.orElseThrow(ResourceNotFoundException::new);
@@ -58,6 +83,15 @@ public class AnalysisResultsService {
 		}
 	}
 
+	/**
+	 * Zip result CSV files.
+	 *
+	 * @param analysisId
+	 *            the analysis id
+	 * @return the string
+	 * @throws RuntimeException
+	 *             the runtime exception
+	 */
 	private String zipResultCSVFiles(String analysisId) throws RuntimeException {
 		String resultsDir = ANALYSES_DIR + analysisId + "/results/";
 		String zipFilepath = resultsDir + "results.zip";

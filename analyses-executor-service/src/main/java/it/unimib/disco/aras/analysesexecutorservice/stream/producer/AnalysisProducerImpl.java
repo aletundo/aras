@@ -11,13 +11,22 @@ import it.unimib.disco.aras.analysesexecutorservice.stream.AnalysesStream;
 import it.unimib.disco.aras.analysesexecutorservice.stream.message.AnalysisMessage;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * The Class AnalysisProducerImpl.
+ */
 @Service
+
+/** The Constant log. */
 @Slf4j
 public class AnalysisProducerImpl implements Producer<AnalysisMessage> {
 
+	/** The analyses streams. */
 	@Autowired
 	private AnalysesStream analysesStreams;
 
+	/* (non-Javadoc)
+	 * @see it.unimib.disco.aras.analysesexecutorservice.stream.producer.Producer#dispatch(java.lang.Object)
+	 */
 	@Override
 	public void dispatch(final AnalysisMessage analysis) {
 		MessageChannel messageChannel = analysesStreams.outboundAnalyses();

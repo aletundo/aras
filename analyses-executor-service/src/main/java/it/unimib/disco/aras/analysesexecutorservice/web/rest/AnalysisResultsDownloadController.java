@@ -16,14 +16,27 @@ import org.springframework.web.bind.annotation.RestController;
 import it.unimib.disco.aras.analysesexecutorservice.service.AnalysisResultsService;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * The Class AnalysisResultsDownloadController.
+ */
 @RestController
 @RequestMapping("/results/{analysisResultsId}")
+
+/** The Constant log. */
 @Slf4j
 public class AnalysisResultsDownloadController {
 	
+	/** The analysis results service. */
 	@Autowired
 	private AnalysisResultsService analysisResultsService;
 	
+	/**
+	 * Download results.
+	 *
+	 * @param analysisResultsId
+	 *            the analysis results id
+	 * @return the response entity
+	 */
 	@GetMapping(value = "/download", produces = "application/zip")
 	public ResponseEntity<?> downloadResults(@PathVariable("analysisResultsId") String analysisResultsId) {
 		try {

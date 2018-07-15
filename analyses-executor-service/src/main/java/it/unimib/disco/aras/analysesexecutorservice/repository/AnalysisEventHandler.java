@@ -24,22 +24,37 @@ import it.unimib.disco.aras.analysesexecutorservice.stream.message.AnalysisStatu
 import it.unimib.disco.aras.analysesexecutorservice.stream.producer.Producer;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * The Class AnalysisEventHandler.
+ */
 @Service
 @RepositoryEventHandler(Analysis.class)
+
+/** The Constant log. */
 @Slf4j
 public class AnalysisEventHandler {
 
+	/** The producer. */
 	@Autowired
 	private Producer<AnalysisMessage> producer;
 	
+	/** The analysis job service. */
 	@Autowired
 	private AnalysisJobService analysisJobService;
 	
+	/** The rest template. */
 	@Autowired
 	private RestTemplate restTemplate;
 	
+	/** The Constant analysesConfiguratorServiceBaseUrl. */
 	private static final String analysesConfiguratorServiceBaseUrl = "http://analyses-configurator-service";
 	
+	/**
+	 * Handle creating analysis.
+	 *
+	 * @param analysis
+	 *            the analysis
+	 */
 	@HandleBeforeCreate
 	public void handleCreatingAnalysis(Analysis analysis) {
 		
@@ -62,6 +77,12 @@ public class AnalysisEventHandler {
 		}
 	}
 
+	/**
+	 * Handle analysis created.
+	 *
+	 * @param analysis
+	 *            the analysis
+	 */
 	@HandleAfterCreate
 	public void handleAnalysisCreated(Analysis analysis) {
 		log.debug("Analysis with id: " + analysis.getId() + " saved!");
@@ -72,16 +93,35 @@ public class AnalysisEventHandler {
 		analysisJobService.createJob(analysis.getId());
 	}
 	
+	/**
+	 * Handle analysis deleting.
+	 *
+	 * @param analysis
+	 *            the analysis
+	 */
 	@HandleBeforeDelete
 	public void handleAnalysisDeleting(Analysis analysis) {
 		analysisJobService.deleteJob(analysis.getId());
 	}
 	
+	/**
+	 * Handle analysis saving.
+	 *
+	 * @param analysis
+	 *            the analysis
+	 */
 	@HandleBeforeSave
 	public void handleAnalysisSaving(Analysis analysis) {
 		analysisJobService.rescheduleJob(analysis.getId(), analysis.getStartTime());
 	}
 	
+	/**
+	 * Check input string.
+	 *
+	 * @param input
+	 *            the input
+	 * @return true, if successful
+	 */
 	private boolean checkInputString(String input) {
 		return (input == null || input.trim().length() == 0);
 	}
