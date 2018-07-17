@@ -10,6 +10,7 @@ import org.springframework.data.rest.core.annotation.RepositoryEventHandler;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import it.unimib.disco.aras.analysesconfiguratorservice.entity.AnalysisConfiguration;
@@ -80,10 +81,15 @@ public class AnalysisConfigurationEventHandler {
 		// TODO: validate Arcan parameters
 		// Map<String, String> arcanParameters = configuration.getArcanParameters();
 
-		return isValidInputString(projectId) && isValidInputString(versionId)
-				&& HttpStatus.OK.equals(restTemplate.getForEntity(
-						projectsServiceBaseUrl + "/projects/search/findByVersionId?versionId=" + versionId,
-						String.class).getStatusCode());
+		try {
+			return null != configuration.getArcanParameters() && isValidInputString(projectId)
+					&& isValidInputString(versionId)
+					&& HttpStatus.OK.equals(restTemplate.getForEntity(
+							projectsServiceBaseUrl + "/projects/search/findByVersionId?versionId=" + versionId,
+							String.class).getStatusCode());
+		} catch (RestClientException e) {
+			return false;
+		}
 	}
 
 	/**
