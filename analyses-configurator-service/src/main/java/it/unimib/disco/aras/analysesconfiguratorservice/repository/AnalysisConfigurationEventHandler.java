@@ -3,6 +3,10 @@
  */
 package it.unimib.disco.aras.analysesconfiguratorservice.repository;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.core.annotation.HandleAfterCreate;
 import org.springframework.data.rest.core.annotation.HandleBeforeCreate;
@@ -38,6 +42,22 @@ public class AnalysisConfigurationEventHandler {
 
 	/** The Constant projectsServiceBaseUrl. */
 	private static final String projectsServiceBaseUrl = "http://projects-service";
+	
+	/** The valid parameters. */
+	private static List<String> validParameters;
+	
+	/**
+	 * Instantiates a new analysis configuration event handler.
+	 */
+	public AnalysisConfigurationEventHandler() {
+		validParameters = new ArrayList<>();
+		validParameters.add("classMetrics");
+		validParameters.add("packageMetrics");
+		validParameters.add("cycleDependency");
+		validParameters.add("hubLikeDependencies");
+		validParameters.add("unstableDependencies");
+		validParameters.add("all");
+	}
 
 	/**
 	 * Handle analysis configuration created.
@@ -78,11 +98,12 @@ public class AnalysisConfigurationEventHandler {
 	private boolean isValidConfiguration(AnalysisConfiguration configuration) {
 		String projectId = configuration.getProjectId();
 		String versionId = configuration.getVersionId();
-		// TODO: validate Arcan parameters
-		// Map<String, String> arcanParameters = configuration.getArcanParameters();
+		Map<String, Boolean> arcanParameters = configuration.getArcanParameters();
+		
+		boolean areArcanParametersValid = areArcanParametersValid(arcanParameters);
 
 		try {
-			return null != configuration.getArcanParameters() && isValidInputString(projectId)
+			return areArcanParametersValid && isValidInputString(projectId)
 					&& isValidInputString(versionId)
 					&& HttpStatus.OK.equals(restTemplate.getForEntity(
 							projectsServiceBaseUrl + "/projects/search/findByVersionId?versionId=" + versionId,
@@ -90,6 +111,27 @@ public class AnalysisConfigurationEventHandler {
 		} catch (RestClientException e) {
 			return false;
 		}
+	}
+	
+	/**
+	 * Are arcan parameters valid.
+	 *
+	 * @param arcanParameters
+	 *            the arcan parameters
+	 * @return true, if successful
+	 */
+	private boolean areArcanParametersValid(Map<String, Boolean> arcanParameters) {
+		if(null == arcanParameters) {
+			return false;
+		}
+		
+		for (String param : arcanParameters.keySet()) {
+			if (!validParameters.contains(param)) {
+				return false;
+			}
+		}
+		
+		return true;
 	}
 
 	/**

@@ -45,5 +45,5 @@ public class AnalysisConfigurationMessage {
     private String versionId;
     
     /** The arcan parameters. */
-    private Map<String, String> arcanParameters;
+    private Map<String, Boolean> arcanParameters;
 }
