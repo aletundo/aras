@@ -25,12 +25,12 @@ It also exposes a RESTful API and publishes/consumes notable events to/from Kafk
 
 Analyses executor service
 """""""""""""""""""""""""
-The analyses-executor-service is a `SpringBoot-based <https://projects.spring.io/spring-boot/>`_ microservice. It encapsulates the logic to manage analysis scheduling and execution.
+The analyses-executor-service is a `SpringBoot-based <https://projects.spring.io/spring-boot/>`_ microservice that relies on a `MongoDB <https://www.mongodb.com/>`_ storage engine. It encapsulates the logic to manage analysis scheduling and execution.
 Moreover, it also exposes a RESTful API and publishes/consumes notable events to/from Kafka.
 
 Notifications service
 """""""""""""""""""""
-The analyses-executor-service is a `SpringBoot-based <https://projects.spring.io/spring-boot/>`_ microservice that actually relies on a `MariaDB <https://mariadb.org/>`_ storage engine. It encapsulates the logic to manage and send notifications.
+The analyses-executor-service is a `SpringBoot-based <https://projects.spring.io/spring-boot/>`_ microservice that relies on a `MongoDB <https://www.mongodb.com/>`_ storage engine. It encapsulates the logic to manage and send notifications.
 It also exposes a RESTful API and publishes and consumes notable events to/from Kafka.
 
 Projects service
