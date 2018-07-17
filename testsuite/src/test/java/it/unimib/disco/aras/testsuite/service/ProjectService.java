@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -59,10 +60,10 @@ public class ProjectService {
 		assertThat(headers.getLocation()).isNull();
 	}
 	
-	public ResponseEntity<String> createValidProjectVersion(String projectId) throws IOException {
+	public ResponseEntity<String> createValidProjectVersion(String projectId, String versionName, String versionDescription) throws IOException {
 		ObjectNode jsonObject = objectMapper.getNodeFactory().objectNode();
 		
-		ObjectNode versionObject = objectMapper.getNodeFactory().objectNode().put("name", "TestVersion").put("description", "A beautiful version description");
+		ObjectNode versionObject = objectMapper.getNodeFactory().objectNode().put("name", versionName).put("description", versionDescription);
 		ArrayNode versionsArray = objectMapper.getNodeFactory().arrayNode();
 		versionsArray.add(versionObject);
 		jsonObject.set("versions", versionsArray);
@@ -75,16 +76,16 @@ public class ProjectService {
 		assertThat(status).isEqualTo(HttpStatus.OK);
 		assertThat(body.at("/versions").isArray()).isEqualTo(true);
 		assertThat(body.at("/versions").size()).isEqualTo(1);
-		assertThat(body.at("/versions/0/name").asText()).isEqualTo("TestVersion");
-		assertThat(body.at("/versions/0/description").asText()).isEqualTo("A beautiful version description");
+		assertThat(body.at("/versions/0/name").asText()).isEqualTo(versionName);
+		assertThat(body.at("/versions/0/description").asText()).isEqualTo(versionDescription);
 		
 		return response;
 	}
 	
-	public void createInvalidProjectVersion(String projectId) throws IOException {
+	public void attemptToCreateProjectVersionWithInvalidVersionFields(String projectId, String versionName, String versionDescription) throws IOException {
 		ObjectNode jsonObject = objectMapper.getNodeFactory().objectNode();
 		
-		ObjectNode versionObject = objectMapper.getNodeFactory().objectNode().put("name", "TestVersion");
+		ObjectNode versionObject = objectMapper.getNodeFactory().objectNode().put("name", versionName).put("description", versionDescription);
 		ArrayNode versionsArray = objectMapper.getNodeFactory().arrayNode();
 		versionsArray.add(versionObject);
 		jsonObject.set("versions", versionsArray);
@@ -96,11 +97,34 @@ public class ProjectService {
 		assertThat(status).isEqualTo(HttpStatus.BAD_REQUEST);
 	}
 	
-	public void uploadValidArtefactsZipWithInvalidProjectVersion(String projectId) throws IOException {
+	public void attempToCreateProjectVersionWithInvalidProjectId(String projectId, String versionName, String versionDescription) throws JsonProcessingException {
+		ObjectNode jsonObject = objectMapper.getNodeFactory().objectNode();
+		
+		ObjectNode versionObject = objectMapper.getNodeFactory().objectNode().put("name", versionName).put("description", versionDescription);
+		ArrayNode versionsArray = objectMapper.getNodeFactory().arrayNode();
+		versionsArray.add(versionObject);
+		jsonObject.set("versions", versionsArray);
+
+		ResponseEntity<String> response = projectsServiceServiceClient.createVersion(projectId, jsonObject);
+
+		HttpStatus status = response.getStatusCode();
+
+		assertThat(status).isEqualTo(HttpStatus.NOT_FOUND);
+		
+	}
+	
+	public void uploadValidArtefactsZipWithInvalidProjectVersion(String projectId, String versionId) throws IOException {
 		File file = new ClassPathResource("validZip.zip").getFile();
-		ResponseEntity<String> response = projectsServiceServiceClient.uploadVersionArtefactsZip(projectId, "invalidProjectVersion", file, false);
+		ResponseEntity<String> response = projectsServiceServiceClient.uploadVersionArtefactsZip(projectId, versionId, file, false);
 		HttpStatus status = response.getStatusCode();
 		assertThat(status).isEqualTo(HttpStatus.BAD_REQUEST);
+	}
+	
+	public void uploadValidArtefactsZipWithInvalidProjectId(String projectId, String versionId) throws IOException {
+		File file = new ClassPathResource("validZip.zip").getFile();
+		ResponseEntity<String> response = projectsServiceServiceClient.uploadVersionArtefactsZip(projectId, versionId, file, false);
+		HttpStatus status = response.getStatusCode();
+		assertThat(status).isEqualTo(HttpStatus.NOT_FOUND);
 	}
 	
 	public ResponseEntity<String> uploadValidArtefactsZip(String projectId, String versionId) throws IOException {

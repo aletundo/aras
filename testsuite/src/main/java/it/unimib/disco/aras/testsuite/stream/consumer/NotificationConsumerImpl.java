@@ -22,7 +22,7 @@ public class NotificationConsumerImpl implements Consumer<NotificationMessage> {
 	@Autowired
 	public NotificationConsumerImpl() {
 		this.messages = new LinkedList<>();
-		this.latch = new CountDownLatch(1);
+		this.latch = new CountDownLatch(6);
 	}
 	
 	@StreamListener(TestConfigurationStream.NOTIFICATIONS_INPUT)

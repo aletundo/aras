@@ -15,7 +15,8 @@ spring:
       kafka:
         binder:
           brokers: kafka
-          zkNodes: kafka
+          # zkNodes: kafka
+          autoAddPartitions: true
       bindings:
         analyses-in:
           group: testsuiteGroup

@@ -59,11 +59,25 @@ public class AnalysisConfigurationService {
 		return response;
 	}
 	
-	public void createInvalidConfiguration() throws RestClientException, IOException, InterruptedException {
+	public void attemptToCreateConfigurationWithNullArcanParameters(String projectId, String versionId) throws RestClientException, IOException, InterruptedException {
 		ObjectNode jsonObject = objectMapper.getNodeFactory().objectNode()
-				.put("projectId", "")
-				.put("versionId", "5b25722975a5270001416618");
-
+				.put("projectId", projectId)
+				.put("versionId", versionId);
+		
+		ResponseEntity<String> response =  analysesConfiguratorServiceClient.createConfiguration(jsonObject);
+		
+		HttpStatus status = response.getStatusCode();
+		HttpHeaders headers = response.getHeaders();
+		
+		assertThat(status).isEqualTo(HttpStatus.BAD_REQUEST);
+		assertThat(headers.getLocation()).isNull();
+	}
+	
+	public void attemptToCreateConfigurationWithInvalidProjectIdOrInvalidVersionId(String projectId, String versionId) throws RestClientException, IOException, InterruptedException {
+		ObjectNode jsonObject = objectMapper.getNodeFactory().objectNode()
+				.put("projectId", projectId)
+				.put("versionId", versionId);
+		
 		ObjectNode parametersNode = objectMapper.getNodeFactory().objectNode().put("inputMode", "jarsFolderMode");
 		
 		jsonObject.set("arcanParameters", parametersNode);

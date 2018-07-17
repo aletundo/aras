@@ -72,7 +72,7 @@ public class AnalysisService {
 		return response;
 	}
 
-	public void createStartNowAnalysisWithInvalidConfig() throws JsonProcessingException {
+	public void attempToCreateStartNowAnalysisWithInvalidConfig() throws JsonProcessingException {
 
 		ObjectNode configurationObject = objectMapper.getNodeFactory().objectNode().put("configurationId", "");
 
@@ -111,7 +111,7 @@ public class AnalysisService {
 		return response;
 	}
 
-	public void createScheduledAnalysisWithInvalidConfigAndValidStartTime() throws JsonProcessingException {
+	public void attempToCreateScheduledAnalysisWithInvalidConfigAndValidStartTime() throws JsonProcessingException {
 		ObjectNode configurationObject = objectMapper.getNodeFactory().objectNode().put("configurationId", "");
 
 		ObjectNode jsonObject = objectMapper.getNodeFactory().objectNode();
@@ -127,7 +127,7 @@ public class AnalysisService {
 		assertThat(status).isEqualTo(HttpStatus.BAD_REQUEST);
 	}
 
-	public void createScheduledAnalysisWithValidConfigAndInvalidStartTime(String configurationId) throws JsonProcessingException {
+	public void attempToCreateScheduledAnalysisWithValidConfigAndInvalidStartTime(String configurationId) throws JsonProcessingException {
 
 		ObjectNode configurationObject = objectMapper.getNodeFactory().objectNode().put("id", configurationId);
 

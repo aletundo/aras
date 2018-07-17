@@ -6,5 +6,6 @@ import java.util.concurrent.CountDownLatch;
 public interface Consumer<T> {
 	void consume(T t);
 	CountDownLatch getLatch();
+	void setLatch(CountDownLatch latch);
 	List<T> getMessages();
 }
