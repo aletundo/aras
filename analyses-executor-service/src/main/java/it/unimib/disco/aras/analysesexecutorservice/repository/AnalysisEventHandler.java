@@ -9,7 +9,6 @@ import org.springframework.data.rest.core.annotation.HandleBeforeCreate;
 import org.springframework.data.rest.core.annotation.HandleBeforeDelete;
 import org.springframework.data.rest.core.annotation.HandleBeforeSave;
 import org.springframework.data.rest.core.annotation.RepositoryEventHandler;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Service;
@@ -113,16 +112,5 @@ public class AnalysisEventHandler {
 	@HandleBeforeSave
 	public void handleAnalysisSaving(Analysis analysis) {
 		analysisJobService.rescheduleJob(analysis.getId(), analysis.getStartTime());
-	}
-	
-	/**
-	 * Check input string.
-	 *
-	 * @param input
-	 *            the input
-	 * @return true, if successful
-	 */
-	private boolean checkInputString(String input) {
-		return (input == null || input.trim().length() == 0);
 	}
 }

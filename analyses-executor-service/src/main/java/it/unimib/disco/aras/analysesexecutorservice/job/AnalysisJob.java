@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Paths;
+import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -60,6 +61,9 @@ public class AnalysisJob extends QuartzJobBean {
 
 	/** The analysis id. */
 	private String analysisId;
+	
+	/** The arcan parameters. */
+	private Map<String, Boolean> arcanParameters;
 
 	/** The analysis producer. */
 	@Autowired
@@ -92,6 +96,7 @@ public class AnalysisJob extends QuartzJobBean {
 		projectId = analysis.getConfiguration().getProjectId();
 		versionId = analysis.getConfiguration().getVersionId();
 		analysisId = analysis.getId();
+		arcanParameters = analysis.getConfiguration().getArcanParameters();
 
 		analysisDir = new File(ANALYSES_DIR + analysis.getId());
 		analysisDir.mkdirs();
@@ -100,7 +105,7 @@ public class AnalysisJob extends QuartzJobBean {
 			try {
 				prepareArtefacts(artefacts);
 				InterfaceModel interfaceModel = configureArcan();
-				runArcanDetection(interfaceModel);
+				runArcanDetection(interfaceModel, arcanParameters);
 			} catch (IOException | ZipException | RuntimeException | TypeVertexException e) {
 			}
 		});
@@ -179,19 +184,48 @@ public class AnalysisJob extends QuartzJobBean {
 	 *
 	 * @param interfaceModel
 	 *            the interface model
+	 * @param arcanParameters
+	 *            the arcan parameters
 	 * @throws TypeVertexException
 	 *             the type vertex exception
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	private void runArcanDetection(InterfaceModel interfaceModel) throws TypeVertexException, IOException {
+	private void runArcanDetection(InterfaceModel interfaceModel, Map<String, Boolean> arcanParameters) throws TypeVertexException, IOException {
 		interfaceModel.buildGraphTinkerpop();
 		try {
-			interfaceModel.runCycleDetectorShapeFilter();
-			interfaceModel.runHubLikeDependencies();
-			interfaceModel.runUnstableDependencies();
-			interfaceModel.createCSVClassesMetrics();
-			interfaceModel.createCSVPackageMetrics();
+			
+			// Remove if the parameter is false
+			arcanParameters.keySet().removeIf(param -> !arcanParameters.get(param));
+			
+			for (String param : arcanParameters.keySet()) {
+				switch (param) {
+				case "cycleDependency":
+					interfaceModel.runCycleDetectorShapeFilter();
+					break;
+				case "hubLinkDependencies":
+					interfaceModel.runCycleDetectorShapeFilter();
+					break;
+				case "unstableDependencies":
+					interfaceModel.runUnstableDependencies();
+					break;
+				case "classMetrics":
+					interfaceModel.createCSVClassesMetrics();
+					break;
+				case "packageMetrics":
+					interfaceModel.createCSVPackageMetrics();
+					break;
+				case "all":
+					interfaceModel.runCycleDetectorShapeFilter();
+					interfaceModel.runCycleDetectorShapeFilter();
+					interfaceModel.runUnstableDependencies();
+					interfaceModel.createCSVClassesMetrics();
+					interfaceModel.createCSVPackageMetrics();
+				default:
+					break;
+				}
+			}
+			
 			analysisProducer
 					.dispatch(AnalysisMessage.build(analysisId, projectId, versionId, AnalysisStatus.COMPLETED));
 			log.info("Analysis job for project with id: " + projectId + " completed!");
