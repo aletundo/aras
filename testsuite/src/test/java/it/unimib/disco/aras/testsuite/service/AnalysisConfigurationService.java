@@ -3,6 +3,7 @@ package it.unimib.disco.aras.testsuite.service;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,12 +33,16 @@ public class AnalysisConfigurationService {
 	@Autowired
 	private ObjectMapper objectMapper;
 	
-	public ResponseEntity<String> createValidConfiguration(String projectId, String versionId) throws RestClientException, IOException, InterruptedException {
+	public ResponseEntity<String> createValidConfiguration(String projectId, String versionId, Map<String, Boolean> arcanParameters) throws RestClientException, IOException, InterruptedException {
 		ObjectNode jsonObject = objectMapper.getNodeFactory().objectNode()
 				.put("projectId", projectId)
 				.put("versionId", versionId);
 
-		ObjectNode parametersNode = objectMapper.getNodeFactory().objectNode().put("inputMode", "jarsFolderMode");
+		ObjectNode parametersNode = objectMapper.getNodeFactory().objectNode();
+		
+		arcanParameters.keySet().forEach(param -> {
+			parametersNode.put(param, arcanParameters.get(param));
+		});
 		
 		jsonObject.set("arcanParameters", parametersNode);
 		
@@ -73,12 +78,16 @@ public class AnalysisConfigurationService {
 		assertThat(headers.getLocation()).isNull();
 	}
 	
-	public void attemptToCreateConfigurationWithInvalidProjectIdOrInvalidVersionId(String projectId, String versionId) throws RestClientException, IOException, InterruptedException {
+	public void attemptToCreateConfigurationWithInvalidProjectIdOrInvalidVersionId(String projectId, String versionId, Map<String, Boolean> arcanParameters) throws RestClientException, IOException, InterruptedException {
 		ObjectNode jsonObject = objectMapper.getNodeFactory().objectNode()
 				.put("projectId", projectId)
 				.put("versionId", versionId);
 		
-		ObjectNode parametersNode = objectMapper.getNodeFactory().objectNode().put("inputMode", "jarsFolderMode");
+		ObjectNode parametersNode = objectMapper.getNodeFactory().objectNode();
+		
+		arcanParameters.keySet().forEach(param -> {
+			parametersNode.put(param, arcanParameters.get(param));
+		});
 		
 		jsonObject.set("arcanParameters", parametersNode);
 		
