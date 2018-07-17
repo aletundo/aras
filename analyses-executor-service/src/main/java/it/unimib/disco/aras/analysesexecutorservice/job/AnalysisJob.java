@@ -155,6 +155,7 @@ public class AnalysisJob extends QuartzJobBean {
 		File[] files = analysisDir.listFiles();
 
 		if (1 != files.length || 1 > files[0].listFiles().length) {
+			analysisProducer.dispatch(AnalysisMessage.build(analysisId, projectId, versionId, AnalysisStatus.FAILED));
 			throw new RuntimeException("Invalid JARs folder");
 		}
 	}
