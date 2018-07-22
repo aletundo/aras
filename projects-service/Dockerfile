@@ -22,4 +22,4 @@ RUN apk update && apk --no-cache add bash libstdc++ ca-certificates openssl && \
 COPY --from=builder /home/root/build/projects-service/target/*.jar \
 /srv/projects-service/projects-service.jar
 WORKDIR /srv/projects-service/
-ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "projects-service.jar"]
+ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-XX:+PrintFlagsFinal", "-XX:+UnlockExperimentalVMOptions", "-XX:+UseCGroupMemoryLimitForHeap", "-jar", "projects-service.jar"]

@@ -17,4 +17,4 @@ RUN apk del tzdata
 COPY --from=builder /home/root/build/config-server/target/*.jar \
 /srv/config-server/config-server.jar
 WORKDIR /srv/config-server/
-ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "config-server.jar"]
+ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-XX:+PrintFlagsFinal", "-XX:+UnlockExperimentalVMOptions", "-XX:+UseCGroupMemoryLimitForHeap", "-jar", "config-server.jar"]

@@ -17,4 +17,4 @@ RUN apk del tzdata
 COPY --from=builder /home/root/build/analyses-executor-service/target/*.jar \
 /srv/analyses-executor-service/analyses-executor-service.jar
 WORKDIR /srv/analyses-executor-service/
-ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "analyses-executor-service.jar"]
+ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-XX:+PrintFlagsFinal", "-XX:+UnlockExperimentalVMOptions", "-XX:+UseCGroupMemoryLimitForHeap", "-jar", "analyses-executor-service.jar"]

@@ -17,4 +17,4 @@ RUN apk del tzdata
 COPY --from=builder /home/root/build/eureka-server/target/*.jar \
 /srv/eureka-server/eureka-server.jar
 WORKDIR /srv/eureka-server/
-ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "eureka-server.jar"]
+ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-XX:+PrintFlagsFinal", "-XX:+UnlockExperimentalVMOptions", "-XX:+UseCGroupMemoryLimitForHeap", "-jar", "eureka-server.jar"]

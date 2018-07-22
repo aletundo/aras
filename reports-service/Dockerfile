@@ -22,4 +22,4 @@ RUN apk update && apk --no-cache add bash libstdc++ ca-certificates openssl && \
 COPY --from=builder /home/root/build/reports-service/target/*.jar \
 /srv/reports-service/reports-service.jar
 WORKDIR /srv/reports-service/
-ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "reports-service.jar"]
+ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-XX:+PrintFlagsFinal", "-XX:+UnlockExperimentalVMOptions", "-XX:+UseCGroupMemoryLimitForHeap", "-jar", "reports-service.jar"]

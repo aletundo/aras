@@ -17,4 +17,4 @@ RUN apk del tzdata
 COPY --from=builder /home/root/build/notifications-service/target/*.jar \
 /srv/notifications-service/notifications-service.jar
 WORKDIR /srv/notifications-service/
-ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "notifications-service.jar"]
+ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-XX:+PrintFlagsFinal", "-XX:+UnlockExperimentalVMOptions", "-XX:+UseCGroupMemoryLimitForHeap", "-jar", "notifications-service.jar"]

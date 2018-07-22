@@ -17,4 +17,4 @@ RUN apk del tzdata
 COPY --from=builder /home/root/build/gateway/target/*.jar \
 /srv/gateway/gateway.jar
 WORKDIR /srv/gateway/
-ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "gateway.jar"]
+ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-XX:+PrintFlagsFinal", "-XX:+UnlockExperimentalVMOptions", "-XX:+UseCGroupMemoryLimitForHeap", "-jar", "gateway.jar"]
